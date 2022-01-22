@@ -1,4 +1,5 @@
 ﻿using Inventory_Mangement_System.Model;
+using Inventory_Mangement_System.Model.Common;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ namespace Inventory_Mangement_System.Repository
 {
     public class ProductionRepository : IProductionRepository
     {
-        public async Task<string> AddProductionDetails(ProductionModel productionModel)
+        public Result AddProductionDetails(ProductionModel productionModel)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -36,7 +37,12 @@ namespace Inventory_Mangement_System.Repository
                 productionDetail.VegetableID = vg;
                 context.ProductionDetails.InsertOnSubmit(productionDetail);
                 context.SubmitChanges();
-                return "Product details added succesfully ";
+                return new Result()
+                {
+                    Message = string.Format($"{productionModel.vegetablenm} Production details Added Successfully."),
+                    Status = Result.ResultStatus.success,
+                    Data = productionModel.vegetablenm,
+                };
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using Inventory_Mangement_System.Model;
+using Inventory_Mangement_System.Model.Common;
 using ProductInventoryContext;
 using System;
 using System.Collections;
@@ -11,7 +12,7 @@ namespace Inventory_Mangement_System.Repository
     public class AreaRepository:IAreaRepository
     {
         //New Main Area Add 
-        public async Task<string> AddMainAreaAsync(MainAreaModel mainAreaModel)
+        public Result AddMainAreaAsync(MainAreaModel mainAreaModel)
         {
             using(ProductInventoryDataContext context=new ProductInventoryDataContext())
             {
@@ -19,15 +20,37 @@ namespace Inventory_Mangement_System.Repository
                 var MA = context.MainAreas.SingleOrDefault(x => x.MainAreaName == mainAreaModel.mname);
                 if(MA != null)
                 {
-                    var id = context.MainAreas.SingleOrDefault(x => x.MainAreaName == mainAreaModel.mname);
-                    var sd1 = mainAreaModel.subarea.Select(x => new SubArea()
+                    var SubA = mainAreaModel.subarea.Select(x => new SubArea()
                     {
-                        MainAreaID = id.MainAreaID,
+                        MainAreaID = MA.MainAreaID,
                         SubAreaName = x.sname
                     }).ToList();
-                    context.SubAreas.InsertAllOnSubmit(sd1);
+                    
+                    //var SA = (from m in context.MainAreas
+                    //          join s in context.SubAreas
+                    //          on m.MainAreaID equals s.MainAreaID
+                    //          where m.MainAreaID == MA.MainAreaID
+                    //          select new
+                    //          {
+                    //              m.MainAreaID,
+                    //              s.SubAreaName
+                    //          }).Distinct().ToList();
+                    //var sd = (from m in mainAreaModel.subarea
+                    //          select new
+                    //          {
+                    //              MainAreaID = MA.MainAreaID,
+                    //              SubAreaName = m.sname
+                    //          }).ToList().Except(SA);
+                    
+                    context.SubAreas.InsertAllOnSubmit(SubA);
                     context.SubmitChanges();
-                    return "Area Added Successfully";
+                    return new Result()
+                    {
+                        Message = string.Format($"{mainAreaModel.mname} Area Added Successfully."),
+                        Status = Result.ResultStatus.success,
+                        Data = mainAreaModel.mname,
+                    };
+                    //return "Area Added Successfully";
                 }
                 else
                 {
@@ -43,7 +66,13 @@ namespace Inventory_Mangement_System.Repository
                     }).ToList();
                     context.SubAreas.InsertAllOnSubmit(sd);
                     context.SubmitChanges();
-                    return "Area Added Successfully";
+                    return new Result()
+                    {
+                        Message = string.Format($"{mainAreaModel.mname} Area Added Successfully."),
+                        Status = Result.ResultStatus.success,
+                        Data = mainAreaModel.mname,
+                    };
+                    //return "Area Added Successfully";
                 }
             }
         }
