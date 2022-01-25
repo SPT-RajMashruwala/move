@@ -35,7 +35,7 @@ namespace Inventory_Mangement_System.Repository
             return new Result()
             {
                 Message = string.Format($"{productModel.ProductName} Added successfully!"),
-                Status = Result.ResultStatus.warning,
+                Status = Result.ResultStatus.info,
                 Data= productModel.ProductName,
             };
         }

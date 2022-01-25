@@ -19,30 +19,36 @@ namespace Inventory_Mangement_System.Repository
                 MainArea mainArea = new MainArea();
                 var MA = context.MainAreas.SingleOrDefault(x => x.MainAreaName == mainAreaModel.mname);
                 if(MA != null)
-                {
-                    var SubA = mainAreaModel.subarea.Select(x => new SubArea()
+                {   
+                    var SA = (from m in context.MainAreas
+                              join s in context.SubAreas
+                              on m.MainAreaID equals s.MainAreaID
+                              where m.MainAreaID == MA.MainAreaID
+                              select new
+                              {
+                                  m.MainAreaID,
+                                  s.SubAreaName
+                              }).ToList();
+
+                    var sd = (from m in mainAreaModel.subarea
+                              select new 
+                              {
+                                  MainAreaID = MA.MainAreaID,
+                                  SubAreaName = m.sname
+                              }).ToList().Except(SA);
+
+
+                    var _sd = (from m in sd
+                               select new SubArea()
+                               {
+                                   MainAreaID = MA.MainAreaID,
+                                   SubAreaName = m.SubAreaName
+                               }).ToList();
+                    if(_sd.Count==0)
                     {
-                        MainAreaID = MA.MainAreaID,
-                        SubAreaName = x.sname
-                    }).ToList();
-                    
-                    //var SA = (from m in context.MainAreas
-                    //          join s in context.SubAreas
-                    //          on m.MainAreaID equals s.MainAreaID
-                    //          where m.MainAreaID == MA.MainAreaID
-                    //          select new
-                    //          {
-                    //              m.MainAreaID,
-                    //              s.SubAreaName
-                    //          }).Distinct().ToList();
-                    //var sd = (from m in mainAreaModel.subarea
-                    //          select new
-                    //          {
-                    //              MainAreaID = MA.MainAreaID,
-                    //              SubAreaName = m.sname
-                    //          }).ToList().Except(SA);
-                    
-                    context.SubAreas.InsertAllOnSubmit(SubA);
+                        throw new ArgumentException("Alredy Exits");
+                    }
+                    context.SubAreas.InsertAllOnSubmit(_sd);
                     context.SubmitChanges();
                     return new Result()
                     {
@@ -76,7 +82,5 @@ namespace Inventory_Mangement_System.Repository
                 }
             }
         }
-
-       
     }
 }

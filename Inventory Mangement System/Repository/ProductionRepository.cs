@@ -27,11 +27,10 @@ namespace Inventory_Mangement_System.Repository
                     context.Vegetables.InsertOnSubmit(v);
                     context.SubmitChanges();
                 }
-
                 int vg = (from obj in context.Vegetables
                           where obj.VegetableName == productionModel.vegetablenm
                           select obj.VegetableID).SingleOrDefault();
-
+                
                 productionDetail.MainAreaID = productionModel.mainAreaDetails.Id;
                 productionDetail.SubAreaID = productionModel.subAreaDetails.Id;
                 productionDetail.VegetableID = vg;
