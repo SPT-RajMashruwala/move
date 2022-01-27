@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Inventory_Mangement_System.Model.Common;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,11 +30,12 @@ namespace Inventory_Mangement_System.Middleware
                 var response = context.Response;
                 //response.ContentType = "application/json";
                 //response.StatusCode = (int)HttpStatusCode.AlreadyReported;
-                var result = JsonSerializer.Serialize(new { 
-                    message = error?.Message,
-                    StatusCodes= (int)HttpStatusCode.AlreadyReported 
-                });
-                await response.WriteAsync(result);
+                Result result = new Result()
+                { 
+                    Message = error?.Message,
+                    Status= Result.ResultStatus.warning, 
+                };
+                await response.WriteAsJsonAsync(result);
             }
             catch (Exception error)
             {

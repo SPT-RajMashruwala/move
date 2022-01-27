@@ -23,7 +23,7 @@ namespace Inventory_Mangement_System.Controllers
         public async Task<IActionResult> GetInventoryView()
         {
             var result = _inventoryViewRepository.GetInventoryView();
-            return Ok(result);
+            return Ok(result.Result);
         }
     }
 }

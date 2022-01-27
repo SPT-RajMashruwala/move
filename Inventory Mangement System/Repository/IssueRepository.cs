@@ -77,41 +77,20 @@ namespace Inventory_Mangement_System.Repository
                 }
 
                 var diff = sum - p;
-                if (diff>issueModel.PurchaseQuantity)
+                if (diff > issueModel.PurchaseQuantity)
                 {
                     issue.PurchaseQuantity = issueModel.PurchaseQuantity;
-                    
                     issue.Date = issueModel.Date.ToLocalTime();
-                    //var CheckMA = context.MainAreas.Where(ma => ma.MainAreaID == issueModel.MainArea.Id
-                    //               && ma.MainAreaName == issueModel.MainArea.Text).SingleOrDefault();
-                    //if(CheckMA == null)
-                    //{
-                    //    throw new Exception("Invalid or not allow");
-                    //}
                     issue.MainAreaID = issueModel.MainArea.Id;
-                    //var CheckSA = context.SubAreas.Where(sa => sa.MainAreaID == issueModel.MainArea.Id
-                    //              && sa.SubAreaID == issueModel.SubArea.Id 
-                    //              && sa.SubAreaName == issueModel.SubArea.Text).SingleOrDefault();
-                    //if (CheckSA == null)
-                    //{
-                    //    throw new Exception("Invalid or not allow");
-                    //}
                     issue.SubAreaID = issueModel.SubArea.Id;
-                    var CheckPro = context.Products.Where(pro => pro.ProductID == issueModel.Product.Id
-                                && pro.ProductName == issueModel.Product.Text).SingleOrDefault();
-                    //if (CheckPro == null)
-                    //{
-                    //    throw new Exception("Invalid or not allow");
-                    //}
                     issue.ProductID = issueModel.Product.Id;
                     context.Issues.InsertOnSubmit(issue);
                     context.SubmitChanges();
-
                     return new Result()
                     {
-                        Message = string.Format($"{CheckPro.ProductName} Added successfully!"),
+                        Message = string.Format($"{issueModel.Product.Text} Added successfully!"),
                         Status = Result.ResultStatus.success,
-                        Data = CheckPro.ProductName,
+                        Data = issueModel.Product.Text,
                     };
                 }
                 else
