@@ -214,3 +214,4 @@ C:\Users\HP\source\repos\Agricultural-Project-Backend-\Inventory Mangement Syste
 C:\Users\HP\source\repos\Agricultural-Project-Backend-\Inventory Mangement System\obj\Debug\net5.0\ref\Inventory Mangement System.dll
 C:\Users\HP\source\repos\Agricultural-Project-Backend-\Inventory Mangement System\obj\Debug\net5.0\Inventory Mangement System.pdb
 C:\Users\HP\source\repos\Agricultural-Project-Backend-\Inventory Mangement System\obj\Debug\net5.0\Inventory Mangement System.genruntimeconfig.cache
+C:\Users\HP\source\repos\Agricultural-Project-Backend-\Inventory Mangement System\bin\Debug\net5.0\NgrokAspNetCore.Lib.dll

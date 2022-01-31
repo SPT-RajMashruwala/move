@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NgrokAspNetCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,7 +39,8 @@ namespace Inventory_Mangement_System
             services.AddTransient<IIssueRepository, IssueRepository>();
             services.AddTransient<IProductionRepository, ProductionRepository>();
             services.AddTransient<IInventoryViewRepository, InventoryViewRepository>();
-            
+
+            services.AddNgrok();
             services.AddControllers().AddNewtonsoftJson(); ;
             services.AddCors(option =>
             {
@@ -76,6 +78,12 @@ namespace Inventory_Mangement_System
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(builder => builder
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .SetIsOriginAllowed((host) => true)
+            .AllowCredentials()
+            );
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -95,6 +103,7 @@ namespace Inventory_Mangement_System
 
             // custom jwt auth middleware
             app.UseMiddleware<JwtHandler>();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

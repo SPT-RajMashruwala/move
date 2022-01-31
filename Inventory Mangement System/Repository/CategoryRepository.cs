@@ -11,19 +11,20 @@ namespace Inventory_Mangement_System.Repository
 {
     public class CategoryRepository : ICategoryRepository
     {
-        public Result AddCategory(CategoryModel categoryModel, int Uid)
+        //public Result AddCategory(CategoryModel categoryModel, int Uid)
+        public Result AddCategory(CategoryModel categoryModel)
         {
             ProductInventoryDataContext context = new ProductInventoryDataContext();
             Category category = new Category();
             var res = context.Categories.FirstOrDefault(x => x.CategoryName == categoryModel.CategoryName);
             if(res != null )
             {
-                throw new ArgumentException( "Category Already Exist");
+                throw new ArgumentException("Category Already Exist");
             }
             else
             {
                 category.CategoryName = categoryModel.CategoryName;
-                category.Description = categoryModel.Descritption;
+                category.Description = categoryModel.Description;
                 context.Categories.InsertOnSubmit(category);
                 context.SubmitChanges();
                 return new Result()
@@ -32,7 +33,6 @@ namespace Inventory_Mangement_System.Repository
                     Status = Result.ResultStatus.success,
                     Data = categoryModel.CategoryName,
                 }; 
-                //return $"Category {categoryModel.CategoryName } Added Successfully";
             }
         }
 

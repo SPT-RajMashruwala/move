@@ -2,6 +2,7 @@
 using Inventory_Mangement_System.Model.Common;
 using Inventory_Mangement_System.Repository;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -25,22 +26,22 @@ namespace Inventory_Mangement_System.Controllers
         public async Task<IActionResult> ProductAdded(ProductModel productModel)
         {
             var result = _productRepository.AddProduct(productModel);
-
             return Ok(result);
-            
-            //return new ObjectResult(new
-            //{
-            //    Message = string.Format($"{productModel.ProductName} Added successfully!"),
-            //    Status = Result.ResultStatus.success,
-            //    Data = productModel.ProductName,
-            //});
+           
+        }
+
+        [HttpPatch("UpdateProduct/{productID}")]
+        public async Task<IActionResult> Update([FromBody] JsonPatchDocument productModel,int productID)
+        {
+            var result = _productRepository.UpdateProduct(productModel, productID);
+            return Ok(result);
         }
 
         [HttpGet("getunit")]
         public async Task<IActionResult> ProductGet()
         {
             var result = _productRepository.GetUnit();
-            return Ok(result);
+            return Ok(result.Result);
         }
     }
 }

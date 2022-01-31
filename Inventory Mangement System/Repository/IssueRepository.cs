@@ -77,9 +77,9 @@ namespace Inventory_Mangement_System.Repository
                 }
 
                 var diff = sum - p;
-                if (diff > issueModel.PurchaseQuantity)
+                if (diff >= issueModel.IssueQuantity)
                 {
-                    issue.PurchaseQuantity = issueModel.PurchaseQuantity;
+                    issue.PurchaseQuantity = issueModel.IssueQuantity;
                     issue.Date = issueModel.Date.ToLocalTime();
                     issue.MainAreaID = issueModel.MainArea.Id;
                     issue.SubAreaID = issueModel.SubArea.Id;
@@ -88,26 +88,27 @@ namespace Inventory_Mangement_System.Repository
                     context.SubmitChanges();
                     return new Result()
                     {
-                        Message = string.Format($"{issueModel.Product.Text} Added successfully!"),
+                        Message = string.Format($"{issueModel.Product.Text} Issue successfully!"),
                         Status = Result.ResultStatus.success,
                         Data = issueModel.Product.Text,
                     };
                 }
                 else
                 {
-                    return new Result()
-                    {
-                        Message = string.Format($"Product Out Of Stock.Total Quantity is {diff}"),
-                        Status = Result.ResultStatus.none,
-                        Data = diff,
-                    };
+                    throw new ArgumentException($"Product Out Of Stock.Total Quantity is {diff}");
+                    //return new Result()
+                    //{
+                    //    Message = string.Format($"Product Out Of Stock.Total Quantity is {diff}"),
+                    //    Status = Result.ResultStatus.none,
+                    //    Data = diff,
+                    //};
                 }
                 
                 //return $"{issueModel.Product.Text } Add Successfully";
             }
         }
 
-        public async Task<string> total(IssueModel issueModel)
+        public Result total(IssueModel issueModel)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -131,8 +132,12 @@ namespace Inventory_Mangement_System.Repository
                 }
 
                 var diff = sum - p;
-                return $"Product Name : {issueModel .Product .Text } \n Remaining quantity : {diff} \n Purchase quantity : {sum} \n Issue quantity : {p}";
-
+                return new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message= "Total Quantity Purchase",
+                    Data = sum,
+                };
             }
         }
     }

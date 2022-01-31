@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Inventory_Mangement_System.Model
         
         [Required(ErrorMessage = "Category required")]
         public string CategoryName { get; set; }
-        public string Descritption { get; set; }
+        public string Description { get; set; }
 
     }
 }

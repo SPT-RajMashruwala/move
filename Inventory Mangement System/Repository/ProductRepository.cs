@@ -1,5 +1,6 @@
 ﻿using Inventory_Mangement_System.Model;
 using Inventory_Mangement_System.Model.Common;
+using Microsoft.AspNetCore.JsonPatch;
 using ProductInventoryContext;
 using System;
 using System.Collections;
@@ -11,7 +12,6 @@ namespace Inventory_Mangement_System.Repository
 {
     public class ProductRepository : IProductRepository
     {
-
         public Result AddProduct(ProductModel productModel)
         {
             ProductInventoryDataContext context = new ProductInventoryDataContext();
@@ -35,27 +35,40 @@ namespace Inventory_Mangement_System.Repository
             return new Result()
             {
                 Message = string.Format($"{productModel.ProductName} Added successfully!"),
-                Status = Result.ResultStatus.info,
+                Status = Result.ResultStatus.success,
                 Data= productModel.ProductName,
             };
         }
-
-        public Result GetUnit()
+        public Result UpdateProduct(JsonPatchDocument productModel,int productID)
+        {
+            using(ProductInventoryDataContext context=new ProductInventoryDataContext())
+            {
+                Product product = new Product();
+                product = context.Products.SingleOrDefault(id => id.ProductID == productID);
+                if (product == null)
+                {
+                    throw new Exception("");
+                }
+                productModel.ApplyTo(product);
+                context.SubmitChanges();
+                return new Result()
+                {
+                    Message = string.Format("fully!"),
+                    Status = Result.ResultStatus.success,
+                    //Data = product,
+                };
+            }
+        }
+        public async Task<IEnumerable> GetUnit()
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-                var unit=(from x in context.ProductUnits 
+                return (from x in context.ProductUnits 
                         select new IntegerNullString()
                         {
                             Text = x.Type ,
                             Id = x.UnitID 
                         }).ToList();
-                return new Result()
-                {
-                    Message = string.Format("fully!"),
-                    Status = Result.ResultStatus.success,
-                    Data = unit,
-                };
             }
         }
     }

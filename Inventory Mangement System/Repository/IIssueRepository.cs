@@ -11,6 +11,6 @@ namespace Inventory_Mangement_System.Repository
         Task<IEnumerable> GetSubArea(int id);
         Task<IEnumerable> GetProduct();
         Result IssueProduct(IssueModel issueModel);
-        Task<string> total(IssueModel issueModel);
+        Result total(IssueModel issueModel);
     }
 }

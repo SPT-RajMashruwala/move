@@ -28,21 +28,26 @@ namespace Inventory_Mangement_System.Controllers
         [HttpPost ("addRole")]
         public async Task<IActionResult> RoleAdded(RoleModel roleModel)
         {
-            var result =  _accountRepository.AddRole(roleModel);
+            var result = _accountRepository.AddRole(roleModel);
             return Ok(result);
         }
 
         [HttpPost("SignUp")]
         public async Task<IActionResult> SignUp([FromBody]UserModel userModel)
         {
-            var result =  _accountRepository.RegisterUser(userModel);
-            return Ok(result);
+            //string rname = (string)HttpContext.Items["Rolename"];
+            //if (rname == "SuperAdmin")
+            //{
+                var result = _accountRepository.RegisterUser(userModel);
+                return Ok(result);
+            //}
+            //return Unauthorized();
         }
 
         [HttpPost("Login")]
         public async Task<IActionResult> SignIn([FromBody]LoginModel loginModel)
         {
-            var result =  _accountRepository.LoginUser(loginModel);
+            var result = _accountRepository.LoginUser(loginModel);
             return Ok(result);
         }
 
@@ -51,11 +56,7 @@ namespace Inventory_Mangement_System.Controllers
         {
             int uid = (int)HttpContext.Items["UserId"];
             return Ok(uid);
-            //return (new
-            //{
-            //    ""=,
-            //    ""
-            //});
+            
             //var isClaim = User.Claims.FirstOrDefault(x => x.Type.ToString().Equals(ClaimTypes.Name, StringComparison.InvariantCultureIgnoreCase));
             //if (isClaim != null)
             //{

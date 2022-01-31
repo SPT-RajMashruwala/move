@@ -17,6 +17,7 @@ namespace Inventory_Mangement_System.Model.Common
             info
 
         }
+
        // public Guid? LogId { get; set; }
 
         [JsonProperty("Result")]
@@ -28,14 +29,13 @@ namespace Inventory_Mangement_System.Model.Common
             }
             set
             {
-                Status = (ResultStatus)(Enum.Parse(typeof(ResultStatus), value, true));
+                Status = (ResultStatus)(Enum.Parse(typeof(ResultStatus),value, true));
             }
         }
         [JsonIgnore]
         public ResultStatus Status { get; set; }
         public string Message { get; set; }
         public dynamic Data { get; set; }
-    
     }
 }
         

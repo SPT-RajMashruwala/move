@@ -7,7 +7,8 @@ namespace Inventory_Mangement_System.Repository
 {
     public interface ICategoryRepository
     {
-        Result AddCategory(CategoryModel categoryModel, int Uid);
+        //Result AddCategory(CategoryModel categoryModel, int Uid);
+        Result AddCategory(CategoryModel categoryModel);
         Task<IEnumerable> GetCategory();
 
     }

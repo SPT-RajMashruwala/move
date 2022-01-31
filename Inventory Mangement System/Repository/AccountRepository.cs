@@ -33,13 +33,14 @@ namespace Inventory_Mangement_System.Repository
                 Role role = new Role();
                 role.RoleName = roleModel.RoleName;
                 var check = context.Roles.FirstOrDefault(x => x.RoleName == roleModel.RoleName);
+
                 if(check != null)
                 {
                     return new Result()
                     {
                         Message = string.Format($"Role already exist"),
-                        Status = Result.ResultStatus.none,};
-                    //return "Role already exist";
+                        Status = Result.ResultStatus.none,
+                    };
                 }
                 else
                 {
@@ -48,10 +49,9 @@ namespace Inventory_Mangement_System.Repository
                     return new Result()
                     {
                         Message = string.Format($"New Role Added Successfully"),
-                        Status = Result.ResultStatus.none,
+                        Status = Result.ResultStatus.success,
                         Data = roleModel.RoleName,
                     };
-                    //return "New Role Added Successfully";
                 }
             }
         }
@@ -65,24 +65,18 @@ namespace Inventory_Mangement_System.Repository
             var query = (from user1 in context.Users
                          join r1 in context.Roles
                          on user1.RoleID equals r1.RoleID
-                         where user1.EmailAddress  == userModel.EmailAddress  && user1.Password == userModel.Password 
+                         where user1.EmailAddress  == userModel.EmailAddress  && user1.UserName==userModel.UserName
                          select new
                          {
                              r1.RoleName
                          }).Count();
             if (query != 0)
             {
-                throw new ArgumentException("User Already exist");
-                //return "User Already exist";
+                throw new ArgumentException("User Already Exists");
             }
             else
             {
                 user.UserName = userModel.UserName;
-                var pcheck = context.Users.SingleOrDefault(x => x.Password == userModel.Password);
-                if(pcheck != null)
-                {
-                    throw new MethodAccessException("Write Another Password");
-                }
                 user.Password = userModel.Password;
                 user.RoleID = 2;
                 user.EmailAddress = userModel.EmailAddress;
@@ -91,11 +85,10 @@ namespace Inventory_Mangement_System.Repository
                 return new Result()
                 {
                     Message = string.Format($"{userModel.UserName}  Register as User Successfully"),
-                    Status = Result.ResultStatus.none,
+                    Status = Result.ResultStatus.success,
                     Data = userModel.UserName,
                 };
-                //return $"{userModel.UserName}  Register as User Successfully";
-            }
+             }
         }
 
         public Result LoginUser(LoginModel loginModel )
@@ -108,14 +101,15 @@ namespace Inventory_Mangement_System.Repository
                        select new
                        {
                          UserID = u1.UserID,
-                         RoleID = u1.RoleID 
+                         RoleID = u1.RoleID,
+                         RoleName=u1.Role.RoleName
                        }).FirstOrDefault();
             if(res != null)
             {
                 var authclaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,loginModel.EmailAddress),
-                    new Claim (ClaimTypes.Role,res.RoleID.ToString() ),
+                    new Claim (ClaimTypes.Role,res.RoleName),
                     new Claim (ClaimTypes .Sid , res.UserID .ToString()),
                     new Claim (JwtRegisteredClaimNames.Jti,Guid.NewGuid ().ToString ()),
                 };
@@ -134,11 +128,10 @@ namespace Inventory_Mangement_System.Repository
                 context.UserRefreshTokens.InsertOnSubmit(userRefreshToken);
                 context.SubmitChanges();
 
-                //return $"Login Successfully";
                 return new Result()
                 {
                     Message = string.Format($"Login Successfully"),
-                    Status = Result.ResultStatus.none,
+                    Status = Result.ResultStatus.success,
                     Data = jwtToken,
                 };
                 //return new ObjectResult(new
@@ -146,16 +139,10 @@ namespace Inventory_Mangement_System.Repository
                 //    token = jwtToken,
                 //    refreshToken = refreshToken
                 //});
-
             }
             else
             {
-                return new Result()
-                {
-                    Message = string.Format($"Please Enter valid login details"),
-                    Status = Result.ResultStatus.none,
-                };
-                //return "Please Enter valid login details";
+                throw new ArgumentException("Please Enter Valid Login Details");
             }
         }
     }

@@ -32,7 +32,7 @@ namespace Inventory_Mangement_System.Repository
                 return new Result()
                 {
                     Message = string.Format($"{purchaseModel.productname.Text} Purchase successfully!"),
-                    Status = Result.ResultStatus.warning,
+                    Status = Result.ResultStatus.success,
                     Data = purchaseModel.productname.Text,
                 };
             }

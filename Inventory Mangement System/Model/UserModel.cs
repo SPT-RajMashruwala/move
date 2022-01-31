@@ -8,9 +8,11 @@ namespace Inventory_Mangement_System.Model
 {
     public class UserModel
     {
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter Only Letter") ]
         [Required(ErrorMessage = "UserName required")]
         public string  UserName { get; set; }
-
+        //^([\w-\.]+@(?!gmail.com)(?!yahoo.com)(?!hotmail.com)([\w- ]+\.)+[\w-]{2,4})?$
+        [RegularExpression(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$", ErrorMessage = "Enter Valid Emial Address")]
         [Required(ErrorMessage = "EmailAddress required")]
         public string EmailAddress { get; set; }
 

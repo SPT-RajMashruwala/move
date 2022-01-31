@@ -48,10 +48,11 @@ namespace Inventory_Mangement_System.Controllers
             return Ok(result);
         }
 
+        //to view total quantity
         [HttpPost("total")]
         public async Task<IActionResult> totalcount(IssueModel issueModel)
         {
-            var result = await _isueRepository.total(issueModel);
+            var result = _isueRepository.total(issueModel);
             return Ok(result);
         }
     }
