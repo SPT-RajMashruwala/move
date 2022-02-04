@@ -27,6 +27,27 @@ namespace Inventory_Mangement_System.Controllers
 
             return Ok(result);
         }
+        [HttpGet("getpurchaseproduct")]
+        public async Task<IActionResult> PurchaseDetailsGeted()
+        {
+            var result = _purchaseRepository.GetPurchaseDetails();
+
+            return Ok(result.Result);
+        }
+        [HttpGet("getpurchaseproductId/{Id}")]
+        public async Task<IActionResult> PurchaseDetailsGetedById(int Id)
+        {
+            var result = _purchaseRepository.GetPurchaseDetailsById(Id);
+
+            return Ok(result.Result);
+        }
+        /*[HttpPut("updatepurchaseproduct/{purchaseID}")]
+        public async Task<IActionResult> PurchaseDetailsUpdated(PurchaseModel purchaseModel,int purchaseID)
+        {
+            var result = _purchaseRepository.UpdatePurchaseDetails(purchaseModel,purchaseID);
+
+            return Ok(result);
+        }*/
 
     }
 }

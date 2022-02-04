@@ -1,4 +1,4 @@
-﻿using Inventory_Mangement_System.Model;
+﻿/*using Inventory_Mangement_System.Model;
 using Inventory_Mangement_System.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -57,3 +57,4 @@ namespace Inventory_Mangement_System.Controllers
         }
     }
 }
+*/

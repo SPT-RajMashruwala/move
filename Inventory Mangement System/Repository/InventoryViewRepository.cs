@@ -29,10 +29,10 @@ namespace Inventory_Mangement_System.Repository
                              on r.ProductID equals c.ProductID
                               select r.PurchaseQuantity).ToList();
                 double cu = 0;
-                foreach (var item in query2)
+              /*  foreach (var item in query2)
                 {
                     cu = cu + item;
-                }
+                }*/
 
                 var diff = sum - cu;
 

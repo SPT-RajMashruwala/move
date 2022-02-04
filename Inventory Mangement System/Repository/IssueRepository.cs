@@ -1,4 +1,4 @@
-﻿using Inventory_Mangement_System.Model;
+﻿/*using Inventory_Mangement_System.Model;
 using Inventory_Mangement_System.Model.Common;
 using ProductInventoryContext;
 using System;
@@ -80,7 +80,7 @@ namespace Inventory_Mangement_System.Repository
                 if (diff >= issueModel.IssueQuantity)
                 {
                     issue.PurchaseQuantity = issueModel.IssueQuantity;
-                    issue.Date = issueModel.Date.ToLocalTime();
+                    issue.DateTime = issueModel.Date.ToLocalTime();
                     issue.MainAreaID = issueModel.MainArea.Id;
                     issue.SubAreaID = issueModel.SubArea.Id;
                     issue.ProductID = issueModel.Product.Id;
@@ -142,3 +142,4 @@ namespace Inventory_Mangement_System.Repository
         }
     }
 }
+*/

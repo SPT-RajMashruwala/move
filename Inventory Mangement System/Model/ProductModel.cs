@@ -12,6 +12,7 @@ namespace Inventory_Mangement_System.Model
         public string Variety { get; set; }
         public string Company { get; set; }
         public string Description { get; set; }
+        public string Remark { get; set; }
         public Model.Common.IntegerNullString categorytype { get; set; } = new Model.Common.IntegerNullString();
         public Model.Common.IntegerNullString type { get; set; } = new Model.Common.IntegerNullString();
     }

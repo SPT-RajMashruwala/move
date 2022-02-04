@@ -1,4 +1,5 @@
-﻿using Inventory_Mangement_System.Model;
+﻿using Inventory_Mangement_System.Middleware;
+using Inventory_Mangement_System.Model;
 using Inventory_Mangement_System.Model.Common;
 using Microsoft.AspNetCore.JsonPatch;
 using ProductInventoryContext;
@@ -17,6 +18,8 @@ namespace Inventory_Mangement_System.Repository
             ProductInventoryDataContext context = new ProductInventoryDataContext();
             Category category = new Category();
             Product product = new Product();
+            UserLoginDetails login = new UserLoginDetails();
+            var MacAddress = login.GetMacAddress().Result;
 
             var pname = context.Products.Where(name => name.ProductName == productModel.ProductName).SingleOrDefault();
             if (pname != null)
@@ -28,7 +31,13 @@ namespace Inventory_Mangement_System.Repository
             product.Company = productModel.Company;
             product.Description = productModel.Description;
             product.Unit = (string)productModel.type.Text;
+            product.TotalProductQuantity = 0;
             product.CategoryID = (int)productModel.categorytype.Id;
+            product.Remark = productModel.Remark;
+            product.UserLoginID = (from obj in context.LoginDetails
+                                   where obj.SystemMac == MacAddress
+                                   select obj.LoginID).SingleOrDefault();
+            product.DateTime = DateTime.Now;
             context.Products.InsertOnSubmit(product);
             context.SubmitChanges();
             //return $"{productModel.ProductName} Added Successfully";

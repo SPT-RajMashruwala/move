@@ -8,6 +8,7 @@ namespace Inventory_Mangement_System.Model
 {
     public class LoginModel
     {
+     /*   public DateTime DateTime { get; set; }*/
         [Required(ErrorMessage = "UserName required")]
         public string EmailAddress { get; set; }
 

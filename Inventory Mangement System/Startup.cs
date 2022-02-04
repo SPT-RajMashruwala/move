@@ -36,12 +36,18 @@ namespace Inventory_Mangement_System
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IAreaRepository, AreaRepository>();
             services.AddTransient<IPurchaseRepository, PurchaseRepository>();
-            services.AddTransient<IIssueRepository, IssueRepository>();
+         /*   services.AddTransient<IIssueRepository, IssueRepository>();*/
             services.AddTransient<IProductionRepository, ProductionRepository>();
             services.AddTransient<IInventoryViewRepository, InventoryViewRepository>();
+            services.AddTransient<IIssuenewRepository, IssuenewRepository>(); 
 
             services.AddNgrok();
             services.AddControllers().AddNewtonsoftJson(); ;
+            services.AddControllers().AddJsonOptions(option =>
+            {
+                option.JsonSerializerOptions.Converters.Add(new DateConverter());
+                
+             });
             services.AddCors(option =>
             {
                 option.AddDefaultPolicy(builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());

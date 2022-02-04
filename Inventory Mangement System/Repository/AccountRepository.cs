@@ -1,6 +1,8 @@
-﻿using Inventory_Mangement_System.Model;
+﻿using Inventory_Mangement_System.Middleware;
+using Inventory_Mangement_System.Model;
 using Inventory_Mangement_System.Model.Common;
 using Inventory_Mangement_System.serevices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using ProductInventoryContext;
@@ -19,14 +21,15 @@ namespace Inventory_Mangement_System.Repository
         private readonly IConfiguration _configuration;
         private readonly ITokenService _tokenService;
 
-        public AccountRepository (IConfiguration configuration,ITokenService tokenService )
+        public AccountRepository(IConfiguration configuration, ITokenService tokenService)
         {
             _configuration = configuration;
             _tokenService = tokenService;
         }
 
+
         //To add new role
-        public Result AddRole(RoleModel roleModel )
+        public Result AddRole(RoleModel roleModel)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -34,7 +37,7 @@ namespace Inventory_Mangement_System.Repository
                 role.RoleName = roleModel.RoleName;
                 var check = context.Roles.FirstOrDefault(x => x.RoleName == roleModel.RoleName);
 
-                if(check != null)
+                if (check != null)
                 {
                     return new Result()
                     {
@@ -62,10 +65,12 @@ namespace Inventory_Mangement_System.Repository
             ProductInventoryDataContext context = new ProductInventoryDataContext();
             User user = new User();
             Role role = new Role();
+            UserLoginDetails login = new UserLoginDetails();
+            var UserMacAddress = login.GetMacAddress().Result;
             var query = (from user1 in context.Users
                          join r1 in context.Roles
                          on user1.RoleID equals r1.RoleID
-                         where user1.EmailAddress  == userModel.EmailAddress  && user1.UserName==userModel.UserName
+                         where user1.EmailAddress == userModel.EmailAddress && user1.UserName == userModel.UserName
                          select new
                          {
                              r1.RoleName
@@ -76,10 +81,14 @@ namespace Inventory_Mangement_System.Repository
             }
             else
             {
+               
+               
                 user.UserName = userModel.UserName;
                 user.Password = userModel.Password;
                 user.RoleID = 2;
                 user.EmailAddress = userModel.EmailAddress;
+                user.DateTime = DateTime.Now;
+                user.SystemMAC = UserMacAddress;
                 context.Users.InsertOnSubmit(user);
                 context.SubmitChanges();
                 return new Result()
@@ -88,37 +97,41 @@ namespace Inventory_Mangement_System.Repository
                     Status = Result.ResultStatus.success,
                     Data = userModel.UserName,
                 };
-             }
+            }
         }
 
-        public Result LoginUser(LoginModel loginModel )
+        public Result LoginUser(LoginModel loginModel)
         {
             ProductInventoryDataContext context = new ProductInventoryDataContext();
+            UserLoginDetails login = new UserLoginDetails();
             User user = new User();
             Role role = new Role();
+            var UserMACAddress = login.GetMacAddress().Result;
+
             var res = (from u1 in context.Users
-                       where u1.EmailAddress  == loginModel.EmailAddress  && u1.Password == loginModel.Password
+                       where u1.EmailAddress == loginModel.EmailAddress && u1.Password == loginModel.Password
+                       join r1 in context.Roles
+                       on u1.RoleID equals r1.RoleID into Login
+                       from l1 in Login
                        select new
                        {
-                         UserID = u1.UserID,
-                         RoleID = u1.RoleID,
-                         RoleName=u1.Role.RoleName
+                           UserID = u1.UserID,
+                           RoleID = u1.RoleID,
+                           RoleName = l1.RoleName,
                        }).FirstOrDefault();
-            if(res != null)
+            if (res != null)
             {
                 var authclaims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name,loginModel.EmailAddress),
                     new Claim (ClaimTypes.Role,res.RoleName),
-                    new Claim (ClaimTypes .Sid , res.UserID .ToString()),
+                    new Claim (ClaimTypes .Sid ,res.UserID .ToString()),
                     new Claim (JwtRegisteredClaimNames.Jti,Guid.NewGuid ().ToString ()),
                 };
                 var jwtToken = _tokenService.GenerateAccessToken(authclaims);
                 var refreshToken = _tokenService.GenerateRefreshToken();
-
-                //var userid = context.Users.SingleOrDefault(x => x.EmailAddress == loginModel.EmailAddress);
                 RefreshToken refreshToken1 = new RefreshToken();
-                refreshToken1.RToken  = refreshToken;
+                refreshToken1.RToken = refreshToken;
                 context.RefreshTokens.InsertOnSubmit(refreshToken1);
                 context.SubmitChanges();
 
@@ -128,6 +141,34 @@ namespace Inventory_Mangement_System.Repository
                 context.UserRefreshTokens.InsertOnSubmit(userRefreshToken);
                 context.SubmitChanges();
 
+                var qs = (from obj in context.Users
+                          where obj.EmailAddress == loginModel.EmailAddress
+                          select obj.UserName).FirstOrDefault();
+              /*  DateConverter d = new DateConverter();*/
+                /*UserLoginDetails login = new UserLoginDetails();*/
+                LoginDetail l = new LoginDetail();
+
+                var mac = (from obj in context.LoginDetails
+                           where obj.SystemMac == UserMACAddress
+                           select obj).ToList();
+                if (mac.Count() > 0)
+                {
+                    var Lid = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
+                    Lid.DateTime = DateTime.Now;
+                    context.SubmitChanges();
+
+
+                }
+                else
+                {
+
+                    l.UserName = qs;
+                    l.SystemMac = UserMACAddress;
+                    l.DateTime = DateTime.Now;
+                    context.LoginDetails.InsertOnSubmit(l);
+                    context.SubmitChanges();
+                }
+                
                 return new Result()
                 {
                     Message = string.Format($"Login Successfully"),
@@ -142,8 +183,9 @@ namespace Inventory_Mangement_System.Repository
             }
             else
             {
-                throw new ArgumentException("Please Enter Valid Login Details");
+                throw new ArgumentException("Please Enter valid login details");
             }
         }
+       
     }
 }
