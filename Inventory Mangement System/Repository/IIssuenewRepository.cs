@@ -1,4 +1,5 @@
 ﻿using Inventory_Mangement_System.Model;
+using Inventory_Mangement_System.Model.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace Inventory_Mangement_System.Repository
 
     {
         Task<string> Add(IssueModel issueModel);
-        Task<string> GetQuantity(IssueModel issueModel,float getQuantity);
+    /*    Task<string> GetQuantity(IntegerNullString model,float getQuantity);*/
 
     }
 }

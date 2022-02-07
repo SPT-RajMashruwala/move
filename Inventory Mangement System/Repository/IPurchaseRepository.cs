@@ -10,6 +10,6 @@ namespace Inventory_Mangement_System.Repository
         Result AddPurchaseDetails(PurchaseModel purchaseModel);
         Task<IEnumerable> GetPurchaseDetails();
         Task<IEnumerable> GetPurchaseDetailsById(int Id);
-        /*Result UpdatePurchaseDetails(PurchaseModel purchaseModel, int purchaseID);*/
+        Result UpdatePurchaseDetails(PurchaseModel purchaseModel, int purchaseID);
     }
 }

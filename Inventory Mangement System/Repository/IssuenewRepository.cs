@@ -1,4 +1,6 @@
-﻿using Inventory_Mangement_System.Model;
+﻿using Inventory_Mangement_System.Middleware;
+using Inventory_Mangement_System.Model;
+using Inventory_Mangement_System.Model.Common;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
@@ -9,50 +11,45 @@ namespace Inventory_Mangement_System.Repository
 {
     public class IssuenewRepository : IIssuenewRepository
     {
-        public float receivequantity;
-        public async Task<string> GetQuantity(IssueModel issueModel,float getQuantity) 
-        {
-            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
-            {
-                this.receivequantity = getQuantity;
-                var pq = (from obj in context.Products
-                          from obj2 in issueModel.issueList
-                          where obj.ProductID == obj2.Product.Id
-                          select obj.TotalProductQuantity).SingleOrDefault();
-                if (this.receivequantity > pq)
-                {
-                    throw new ArgumentException("Quantity of Product is less then you enter ");
-                }
-                else
-                {
-                    return "";
-                }
-            
-            }
-
-
-        }
+       
+      
         public async Task<string> Add(IssueModel issueModel) 
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
             {
                 Issue i = new Issue();
-                
-            
+                UserLoginDetails login = new UserLoginDetails();
+
+
+           
+
+                var MacAddress = login.GetMacAddress().Result;
+                var LoginID = context.LoginDetails.FirstOrDefault(c => c.SystemMac == MacAddress);
+                var qs = (from obj in issueModel.issueList
+                          select new Issue()
+                          {
+
+                              ProductID = obj.Product.Id,
+                              MainAreaID=obj.MainArea.Id,
+                              SubAreaID=obj.SubArea.Id,
+                              Remark=obj.Remark,
+                              UserLoginID=LoginID.LoginID,
+                              DateTime=DateTime.Now,
+                              PurchaseQuantity = obj.IssueQuantity
+
+                          }).ToList();
+                foreach (var item in qs) 
+                {
                     var p = (from obj in context.Products
-                              from obj2 in issueModel.issueList
-                              where obj.ProductID == obj2.Product.Id
-                              select obj.TotalProductQuantity).SingleOrDefault();
-                    if (this.receivequantity < p)
+                             where obj.ProductID == item.ProductID
+                             select obj.TotalProductQuantity).SingleOrDefault();
+                    if (p < item.PurchaseQuantity)
                     {
-
-                        var qs = (from obj in issueModel.issueList
-                                  select new Issue()
-                                  {
-                                      ProductID = obj.Product.Id,
-                                      PurchaseQuantity = obj.IssueQuantity
-
-                                  }).ToList();
+                        throw new ArgumentException($"Product name :{item.ProductID} ," +
+                            $"Enter quantity{item.PurchaseQuantity} more than existing quantity{p}");
+                    }
+                  
+                }
                         context.Issues.InsertAllOnSubmit(qs);
                         context.SubmitChanges();
                         foreach (var item in qs)
@@ -63,10 +60,9 @@ namespace Inventory_Mangement_System.Repository
 
                         }
                     return "Issue successful";
-                    }
-                    else {
-                        throw new ArgumentException("Quantity of Product is less then you enter");
-                    }
+                  
+                        
+         
 
 
 

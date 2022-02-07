@@ -1,4 +1,5 @@
 ﻿using Inventory_Mangement_System.Model;
+using Inventory_Mangement_System.Model.Common;
 using Inventory_Mangement_System.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -21,10 +22,10 @@ namespace Inventory_Mangement_System.Controllers
         }
 
         [HttpPost("addissue")]
-        public async Task<IActionResult> Add(IssueModel issueModel,float enterQuantity) 
+        public async Task<IActionResult> Add(IssueModel issueModel) 
         {
-            var result = issuenewRepository.GetQuantity(issueModel ,enterQuantity);
-            return Ok("");
+            var result = issuenewRepository.Add(issueModel);
+            return Ok(result.Result);
         
         } 
     }

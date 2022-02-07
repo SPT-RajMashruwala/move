@@ -10,6 +10,6 @@ namespace Inventory_Mangement_System.Repository
         Result AddProductionDetails(ProductionModel value);
         Task<IEnumerable> GetProductionDetails();
         Task<IEnumerable> GetProductionDetailsById(int id);
-        /*Result UpdateProductionDetails(ProductionModel productionModel, int productionID);*/
+        Result UpdateProductionDetails(ProductionModel productionModel, int productionID);
     }
 }

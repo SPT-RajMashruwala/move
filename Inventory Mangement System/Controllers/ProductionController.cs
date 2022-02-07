@@ -41,13 +41,13 @@ namespace Inventory_Mangement_System.Controllers
             return Ok(result.Result);
 
         }
-      /*  [HttpPut("updateProduction/{productionID}")]
-        public async Task<IActionResult> ProductionDetailUpdated([FromBody] ProductionModel productionModel,int  productionID)
+        [HttpPut("updateProduction/{productionID}")]
+        public async Task<IActionResult> ProductionDetailUpdated([FromBody] ProductionModel productionModel, int productionID)
         {
             var result = _productionRepository.UpdateProductionDetails(productionModel, productionID);
             return Ok(result);
 
-        }*/
+        }
 
     }
 }
