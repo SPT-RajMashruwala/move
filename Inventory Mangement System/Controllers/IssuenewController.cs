@@ -27,6 +27,20 @@ namespace Inventory_Mangement_System.Controllers
             var result = issuenewRepository.Add(issueModel);
             return Ok(result.Result);
         
-        } 
+        }
+        [HttpGet("getissuebyId/{issueID}")]
+        public async Task<IActionResult> ViewById(int issueID)
+        {
+            var result = issuenewRepository.ViewById(issueID);
+            return Ok(result.Result);
+
+        }
+        [HttpGet("getissue")]
+        public async Task<IActionResult> View()
+        {
+            var result = issuenewRepository.View();
+            return Ok(result.Result);
+
+        }
     }
 }
