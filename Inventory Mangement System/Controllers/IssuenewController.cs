@@ -42,5 +42,13 @@ namespace Inventory_Mangement_System.Controllers
             return Ok(result.Result);
 
         }
+        [HttpPut("updateissue/{issueID}")]
+        public async Task<IActionResult> Update(IssueModel issueModel,int issueID)
+        {
+            var result = issuenewRepository.Update(issueModel, issueID);
+            return Ok(result.Result);
+
+        }
+
     }
 }

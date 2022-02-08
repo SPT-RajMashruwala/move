@@ -179,8 +179,13 @@ namespace Inventory_Mangement_System.Repository
                                     $" area : {issueModel.SubArea.Text}");
 
                             }
-                            else
-                            {
+
+                            
+
+                            
+
+                        }
+                                var temp = pd.TotalProductQuantity + qs.PurchaseQuantity;
                                 qs.DateTime = DateTime.Now;
                                 qs.ProductID = p.Product.Id;
                                 qs.MainAreaID = issueModel.MainArea.Id;
@@ -190,12 +195,9 @@ namespace Inventory_Mangement_System.Repository
                                 qs.PurchaseQuantity = p.IssueQuantity;
                                 RemainQuantity = (float)ps.TotalProductQuantity - p.IssueQuantity;
                                 ps.TotalProductQuantity = RemainQuantity;
+                                pd.TotalProductQuantity = temp;
                                 context.SubmitChanges();
                                 return "Issue Update Successfully";
-
-                            }
-
-                        }
                     }
 
 
@@ -203,10 +205,36 @@ namespace Inventory_Mangement_System.Repository
                 }
                 else 
                 {
-                
+                    foreach(var item in pid)
+                        {
+                        if (p.Product.Id == item.ProductID)
+                        {
+                            throw new Exception($"Entered Product : {item.ProductID} already issued for given sub" +
+                                $" area : {issueModel.SubArea.Text}");
+
+                        }
+                       
+
+                        
+
+                    }
+                            var temp = pd.TotalProductQuantity + qs.PurchaseQuantity;
+                            pd.TotalProductQuantity = temp;
+                            qs.DateTime = DateTime.Now;
+                            qs.ProductID = p.Product.Id;
+                            qs.MainAreaID = issueModel.MainArea.Id;
+                            qs.SubAreaID = issueModel.SubArea.Id;
+                            qs.UserLoginID = mac.LoginID;
+                            qs.Remark = p.Remark;
+                            qs.PurchaseQuantity = p.IssueQuantity;
+                            RemainQuantity = (float)ps.TotalProductQuantity - p.IssueQuantity;
+                            ps.TotalProductQuantity = RemainQuantity;
+                            context.SubmitChanges();
+                            return "Issue Update Successfully";
+
                 }
 
-                qs.DateTime = DateTime.Now;
+             /*   qs.DateTime = DateTime.Now;
                 qs.ProductID = p.Product.Id;
                 qs.MainAreaID = issueModel.MainArea.Id;
                 qs.SubAreaID = issueModel.SubArea.Id;
@@ -218,7 +246,7 @@ namespace Inventory_Mangement_System.Repository
                 context.SubmitChanges();
 
                 return "";
-
+*/
 
 
             }

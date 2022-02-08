@@ -14,6 +14,7 @@ namespace Inventory_Mangement_System.Repository
         Task<string> Add(IssueModel issueModel);
         Task<IEnumerable> ViewById(int issueID);
         Task<IEnumerable> View();
+        Task<string> Update(IssueModel issueModel, int issueID);
     /*    Task<string> GetQuantity(IntegerNullString model,float getQuantity);*/
 
     }
