@@ -17,7 +17,7 @@ namespace Agriculture.Models.ProductDetail
         public string ProductName { get; set; }
         public string Variety { get; set; }
 
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please Enter Only Character.")]
+       /* [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please Enter Only Character.")]*/
         [Required(ErrorMessage = "Company Name is Required")]
         public string Company { get; set; }
         public string Description { get; set; }

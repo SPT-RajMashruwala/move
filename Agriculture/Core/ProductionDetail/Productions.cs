@@ -14,9 +14,9 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-               /* ProductionDetail productionDetail = new ProductionDetail();*/
+                /* ProductionDetail productionDetail = new ProductionDetail();*/
                 MAC mac = new MAC();
-               /* ProductionModel pm = new ProductionModel();*/
+                /* ProductionModel pm = new ProductionModel();*/
                 var UserMACAddress = mac.GetMacAddress().Result;
 
                 var vn1 = (from m in value.ProductionLists
@@ -40,13 +40,13 @@ namespace Agriculture.Core.ProductionDetails
                 var macaddress = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
                 var pd = (from obj in value.ProductionLists
                           select obj).ToList();
-             
-                
+
+
                 var productionlist = (from m in value.ProductionLists
                                       select new ProductionDetail()
                                       {
-                                          
-                                          
+
+
                                           MainAreaID = m.mainAreaDetails.Id,
                                           SubAreaID = m.subAreaDetails.Id,
                                           VegetableID = (from obj in context.Vegetables
@@ -161,24 +161,23 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-                MAC mac = new MAC();
-     /*           ProductionDetail productionDetail = new ProductionDetails();*/
-                var UserMACAddress = mac.GetMacAddress().Result;
-                var macaddress = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
-
-                var veg = (from p in value.ProductionLists
-                           from v in context.Vegetables
-                           where p.Vegetablenm.ToLower() == v.VegetableName.ToLower()
+                MAC login = new MAC();
+                ProductionDetail productionDetail = new ProductionDetail();
+                var UserMACAddress = login.GetMacAddress().Result;
+                var mac = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
+                var vn1 = (from m in value.ProductionLists
+                           from y in context.Vegetables
+                           where m.Vegetablenm.ToLower() == y.VegetableName.ToLower()
                            select new
                            {
-                               VegetableName = v.VegetableName
+                               VegetableName = y.VegetableName
                            }).ToList();
-                if (veg.Count() == 0)
+                if (vn1.Count() == 0)
                 {
-                    var vegetablename = (from p in value.ProductionLists
+                    var vegetablename = (from m in value.ProductionLists
                                          select new Vegetable()
                                          {
-                                             VegetableName = p.Vegetablenm
+                                             VegetableName = m.Vegetablenm
                                          }).ToList();
                     context.Vegetables.InsertAllOnSubmit(vegetablename);
                     context.SubmitChanges();
@@ -200,13 +199,63 @@ namespace Agriculture.Core.ProductionDetails
                           where obj.ProductionID == id
                           select obj).SingleOrDefault();
 
-                return new Result()
+                if (pd.SubAreaID == qs.subAreaDetails.Id)
                 {
-                    Message = string.Format($"Production details Added Successfully."),
-                    Status = Result.ResultStatus.success,
-                    Data = DateTime.Now,
-                };
+
+                    pd.MainAreaID = qs.mainAreaDetails.Id;
+                    pd.SubAreaID = qs.subAreaDetails.Id;
+                    pd.VegetableID = (from obj in vg
+                                      select obj.VegetableID).SingleOrDefault();
+                    pd.Quantity = qs.Quantity;
+                    pd.DateTime = DateTime.Now;
+                    pd.LoginID = mac.LoginID;
+                    pd.Remark = qs.Remark;
+
+
+
+                    context.SubmitChanges();
+                    return new Result()
+                    {
+                        Message = "Production Updated Successfully",
+                        Status = Result.ResultStatus.success,
+                        Data = qs.Vegetablenm
+                    };
+                }
+                else
+                {
+                    var q = (from obj2 in value.ProductionLists
+                             from obj in context.ProductionDetails
+                             where obj2.subAreaDetails.Id == obj.SubAreaID
+                             select obj).ToList();
+                    if (q.Count() > 0)
+                    {
+                        throw new ArgumentException($"Main Area already under production");
+                    }
+                    else
+                    {
+                        pd.MainAreaID = qs.mainAreaDetails.Id;
+                        pd.SubAreaID = qs.subAreaDetails.Id;
+                        pd.VegetableID = (from obj in vg
+                                          select obj.VegetableID).SingleOrDefault();
+                        pd.Quantity = qs.Quantity;
+                        pd.DateTime = DateTime.Now;
+                        pd.LoginID = mac.LoginID;
+                        pd.Remark = qs.Remark;
+
+
+
+                        context.SubmitChanges();
+                        return new Result()
+                        {
+                            Message = "Production Updated Successfully",
+                            Status = Result.ResultStatus.success,
+                            Data = qs.Vegetablenm
+                        };
+                    }
+
+                }
             }
+
         }
     }
 }

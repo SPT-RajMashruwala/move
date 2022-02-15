@@ -55,7 +55,7 @@ namespace Agriculture.Core.ProductDetail
                 {
                     Message = string.Format($" Purchase successfully!"),
                     Status = Result.ResultStatus.success,
-                    Data = DateTime.Now,
+                    Data = $"Total {purchaselist.Count()} Product Purchase Successfully",
                 };
             }
         }
@@ -133,17 +133,42 @@ namespace Agriculture.Core.ProductDetail
                 var qs = (from obj in context.PurchaseDetails
                           where obj.PurchaseID == ID
                           select obj).SingleOrDefault();
+                
                 var q = (from obj in value.purchaseList
                          select obj).SingleOrDefault();
-                qs.ProductID = q.productname.Id;
-                qs.TotalQuantity = q.totalquantity;
-                qs.TotalCost = q.totalcost;
-                qs.Unit = funit;
-                qs.Remark = q.remarks;
-                qs.VendorName = q.vendorname;
-                qs.PurchaseDate = q.Purchasedate.ToLocalTime();
 
-                context.SubmitChanges();
+
+                if (qs.ProductID == q.productname.Id)
+                {
+                    var db = (from obj in context.Products
+                              where obj.ProductID == qs.ProductID
+                              select obj).SingleOrDefault();
+                    var updatedQuantity = db.TotalProductQuantity - qs.TotalQuantity;
+                    db.TotalProductQuantity = updatedQuantity + q.totalquantity;
+                    context.SubmitChanges();
+                }
+                else 
+                {
+                    var db = (from obj in context.Products
+                              where obj.ProductID == qs.ProductID
+                              select obj).SingleOrDefault();
+                    var udb = (from obj in context.Products
+                               where obj.ProductID == q.productname.Id
+                               select obj).SingleOrDefault();
+                     
+                    db.TotalProductQuantity = db.TotalProductQuantity - qs.TotalQuantity;
+                    udb.TotalProductQuantity = udb.TotalProductQuantity + q.totalquantity;
+                    context.SubmitChanges();
+                }
+                    qs.ProductID = q.productname.Id;
+                    qs.TotalQuantity = q.totalquantity;
+                    qs.TotalCost = q.totalcost;
+                    qs.Unit = funit;
+                    qs.Remark = q.remarks;
+                    qs.VendorName = q.vendorname;
+                    qs.PurchaseDate = q.Purchasedate.ToLocalTime();
+                    context.SubmitChanges();
+
                 return new Result()
                 {
                     Message = "Purchase Updated Successfully",

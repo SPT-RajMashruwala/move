@@ -1,4 +1,5 @@
-﻿using Agriculture.Models.Common;
+﻿using Agriculture.Middleware;
+using Agriculture.Models.Common;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,11 @@ namespace Agriculture.Core.ProductDetail
     {
         public Result Add(Models.ProductDetail.Product value)
         {
+            
             ProductInventoryDataContext context = new ProductInventoryDataContext();
+            MAC mac = new MAC();
+            var macObj = mac.GetMacAddress().Result;
+            var MacAddress = context.LoginDetails.FirstOrDefault(x => x.SystemMac == macObj);
             Category category = new Category();
             Product product = new Product();
 
@@ -24,7 +29,9 @@ namespace Agriculture.Core.ProductDetail
                            Description = p.Description,
                            CategoryID = (int)p.categorytype.Id,
                            Unit = (string)p.type.Text,
-                           TotalProductQuantity = 0
+                           TotalProductQuantity = 0,
+                           LoginID=MacAddress.LoginID,
+                           DateTime=DateTime.Now,
                        }).ToList();
             foreach (var item in pro)
             {
@@ -39,9 +46,9 @@ namespace Agriculture.Core.ProductDetail
             context.SubmitChanges();
             return new Result()
             {
-                Message = string.Format($"{product.ProductName} Added Successfully."),
+                Message = string.Format($"Products Added Successfully."),
                 Status = Result.ResultStatus.success,
-                Data = product.ProductName,
+                Data =$"Total {pro.Count()} Product Added",
             };
 
             //var pname = context.Products.Where(name => name.ProductName == productModel.ProductName).SingleOrDefault();
@@ -97,10 +104,21 @@ namespace Agriculture.Core.ProductDetail
                     Data = (from x in context.Products
                             select new
                             {
-                                Unit = x.Unit,
-                                Quantity = (float)x.TotalProductQuantity,
+                               /* ProductID=x.ProductID,
+                                ProductName=x.ProductName,
+                                Variety=x.Variety,
+                                Company=x.Company,
+                                Description=x.Description,
+                                Unit=x.Unit,
+                                Category=x.Category,
+                                TotalProductQuantity=x.TotalProductQuantity
+                                UserName=x.LoginDetail
+                                DateTime=*/
+
+                                Id = x.ProductID,
                                 Text = x.ProductName,
-                                Id = x.ProductID
+                                Unit = x.Unit,
+                                TotalQuantity = (float)x.TotalProductQuantity,
                             }).ToList(),
                 };
                 return result;
@@ -126,7 +144,10 @@ namespace Agriculture.Core.ProductDetail
                                 Company = x.Company,
                                 Description = x.Description,
                                 Unit = x.Unit,
-                                CategoryName = catid.CategoryName
+                                CategoryName = catid.CategoryName,
+                                TotalProductQuantity = x.TotalProductQuantity,
+                                UserName = x.LoginDetail.UserName,
+                                DateTime = x.DateTime,
                             }).ToList()
                 };
                 return result;
@@ -150,6 +171,7 @@ namespace Agriculture.Core.ProductDetail
                     Data = (from x in context.Products
                             join catid in context.Categories
                             on x.CategoryID equals catid.CategoryID
+                            where x.ProductID==ID
                             select new
                             {
                                 ProductID = x.ProductID,
@@ -158,7 +180,10 @@ namespace Agriculture.Core.ProductDetail
                                 Company = x.Company,
                                 Description = x.Description,
                                 Unit = x.Unit,
-                                CategoryName = catid.CategoryName
+                                CategoryName = catid.CategoryName,
+                                TotalProductQuantity = x.TotalProductQuantity,
+                                UserName = x.LoginDetail.UserName,
+                                DateTime = x.DateTime,
                             }).ToList(),
                 };
                 return result;
@@ -171,14 +196,17 @@ namespace Agriculture.Core.ProductDetail
             {
                 var dbobj = (from obj in value.Productlist
                              select obj).SingleOrDefault();
-                Product product = new Product();
-                product = context.Products.SingleOrDefault(x => x.ProductID == id);
-                if (product == null)
+
+                var pn = (from obj in context.Products
+                          where obj.ProductID == id
+                          select obj).SingleOrDefault();
+                
+                if (pn==null)
                 {
                     throw new ArgumentException("Product doesn't exist");
                 }
 
-                if (product.ProductName != dbobj.ProductName)
+                if ( pn.ProductName != dbobj.ProductName)
                 {
                     var _product = context.Products.SingleOrDefault(name => name.ProductName == dbobj.ProductName);
                     if (_product != null)
@@ -187,18 +215,18 @@ namespace Agriculture.Core.ProductDetail
                     }
                 }
 
-                product.ProductName = dbobj.ProductName;
-                product.Variety = dbobj.Variety;
-                product.Company = dbobj.Company;
-                product.CategoryID = dbobj.categorytype.Id;
-                product.Unit = dbobj.type.Text;
-                product.Description = dbobj.Description;
-                context.Products.InsertOnSubmit(product);
+                pn.ProductName = dbobj.ProductName;
+                pn.Variety = dbobj.Variety;
+                pn.Company = dbobj.Company;
+                pn.CategoryID = dbobj.categorytype.Id;
+                pn.Unit = dbobj.type.Text;
+                pn.Description = dbobj.Description;
+               
                 context.SubmitChanges();
                 return new Result()
                 {
                     Message = "Updated Successfully",
-                    Data = product.ProductName,
+                    Data = pn.ProductName,
                     Status = Result.ResultStatus.success,
                 };
             }

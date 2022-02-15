@@ -29,7 +29,9 @@ namespace Agriculture.Core.ProductionDetails
                               Remark = obj.Remark,
                               LoginID = LoginID.LoginID,
                               DateTime = DateTime.Now,
-                              PurchaseQuantity = obj.IssueQuantity
+                              PurchaseQuantity = obj.IssueQuantity,
+                              IssueDate=value.Date.ToLocalTime(),
+                              
 
                           }).ToList();
                 var mainArea = (from obj in context.MainAreas
@@ -42,8 +44,11 @@ namespace Agriculture.Core.ProductionDetails
                              select obj.TotalProductQuantity).SingleOrDefault();
                     if (p < item.PurchaseQuantity)
                     {
-                        throw new ArgumentException($"Product name :{item.ProductID} ," +
-                            $"Enter quantity{item.PurchaseQuantity} more than existing quantity{p}");
+                        var pname =(from obj in context.Products
+                         where obj.ProductID == item.ProductID
+                         select obj.ProductName).SingleOrDefault();
+                        throw new ArgumentException($"Product name : {pname} ," +
+                            $"Enter quantity : {item.PurchaseQuantity} more than existing quantity {p}");
                     }
                    
 
@@ -93,7 +98,8 @@ namespace Agriculture.Core.ProductionDetails
                               MainAreaName = MA.MainAreaName,
                               SubAreaName = SA.SubAreaName,
                               IssueQuantity = obj.PurchaseQuantity,
-                              Remark = obj.Remark
+                              Remark = obj.Remark,
+                              Date=obj.DateTime,
 
 
                           }).ToList();
@@ -127,7 +133,8 @@ namespace Agriculture.Core.ProductionDetails
                               MainAreaName = MA.MainAreaName,
                               SubAreaName = SA.SubAreaName,
                               IssueQuantity = obj.PurchaseQuantity,
-                              Remark = obj.Remark
+                              Remark = obj.Remark,
+                              Date = obj.DateTime,
 
 
                           }).ToList();

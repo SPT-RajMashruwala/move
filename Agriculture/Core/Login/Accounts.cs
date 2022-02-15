@@ -26,6 +26,7 @@ namespace Agriculture.Core.Login
             _configuration = configuration;
             _tokenServices = tokenServices;
         }
+        
 
         //To add new role
         public Result AddRole(Models.Login.Role value)

@@ -65,7 +65,9 @@ namespace Agriculture.Core.ProductionDetails
                                {
                                    MainAreaID = item.MainAreaID,
                                    Remark=y.Remark,
-                                   SubAreaName = y.sname
+                                   SubAreaName = y.sname,
+                                   LoginID = macAddress.LoginID,
+                                   DateTime = DateTime.Now
 
                                }).ToList();
                     context.SubAreas.InsertAllOnSubmit(SD1);
@@ -217,6 +219,8 @@ namespace Agriculture.Core.ProductionDetails
                 var qs = (from obj in context.SubAreas
                           where obj.SubAreaID == ID
                           select obj).SingleOrDefault();
+                context.SubAreas.DeleteOnSubmit(qs);
+                context.SubmitChanges();
                 return new Result()
                 {
                     Status=Result.ResultStatus.success,
@@ -225,13 +229,27 @@ namespace Agriculture.Core.ProductionDetails
                 };
             }
         }
-   /*     public Result DeleteMainArea(int ID) 
+        public Result DeleteMainArea(int ID)
         {
-            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-                var qs = from obj in context.MainAreas
-                         where 
+                var qs = (from obj in context.MainAreas
+                          where obj.MainAreaID == ID
+                          select obj).SingleOrDefault();
+                var dblist = (from obj in context.SubAreas
+                              where obj.MainAreaID == qs.MainAreaID
+                              select obj).ToList();
+                context.MainAreas.DeleteOnSubmit(qs);
+                context.SubAreas.DeleteAllOnSubmit(dblist);
+                context.SubmitChanges();
+
+                return new Result()
+                {
+                    Status=Result.ResultStatus.success,
+                    Message="Main Area Along With Allocated Subarea succesfully Deleted",
+                    Data=$"Main Area : {qs.MainAreaID} and its all Subarea Deleted ",
+                };
             }
-        }*/
+        }
     }
 }
