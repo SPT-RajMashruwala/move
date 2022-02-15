@@ -65,8 +65,8 @@ namespace Agriculture.Core.ProductDetail
                     Data = (from x in context.Categories
                             select new
                             {
-                                CategoryID = x.CategoryID,
-                                CategoryName = x.CategoryName,
+                                CategoryType=new IntegerNullString() { Id=x.CategoryID,Text=x.CategoryName},
+                                
                                 Description = x.Description
                             }).ToList()
                 };
@@ -86,7 +86,7 @@ namespace Agriculture.Core.ProductDetail
                             where x.CategoryID == ID
                             select new
                             {
-                                CategoryName = x.CategoryName,
+                                CategoryType = new IntegerNullString() { Id = x.CategoryID, Text = x.CategoryName },
                                 Description = x.Description
                             }).ToList()
                 };

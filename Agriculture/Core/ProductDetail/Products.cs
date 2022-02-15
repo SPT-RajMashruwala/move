@@ -28,7 +28,7 @@ namespace Agriculture.Core.ProductDetail
                            Company = p.Company,
                            Description = p.Description,
                            CategoryID = (int)p.categorytype.Id,
-                           Unit = (string)p.type.Text,
+                           UnitID = (int)p.type.Id,
                            TotalProductQuantity = 0,
                            LoginID=MacAddress.LoginID,
                            DateTime=DateTime.Now,
@@ -117,7 +117,7 @@ namespace Agriculture.Core.ProductDetail
 
                                 Id = x.ProductID,
                                 Text = x.ProductName,
-                                Unit = x.Unit,
+                                Type=new IntegerNullString() { Id=x.ProductUnit.UnitID,Text=x.ProductUnit.Type},
                                 TotalQuantity = (float)x.TotalProductQuantity,
                             }).ToList(),
                 };
@@ -134,19 +134,17 @@ namespace Agriculture.Core.ProductDetail
                     Status = Result.ResultStatus.success,
                     Message = "ViewProduct Successful",
                     Data = (from x in context.Products
-                            join catid in context.Categories
-                            on x.CategoryID equals catid.CategoryID
+                            
                             select new
                             {
-                                ProductID = x.ProductID,
-                                ProductName = x.ProductName,
+                                Product = new IntegerNullString() { Id = x.ProductID, Text = x.ProductName },
                                 Varitey = x.Variety,
                                 Company = x.Company,
                                 Description = x.Description,
-                                Unit = x.Unit,
-                                CategoryName = catid.CategoryName,
+                                Type = new IntegerNullString() {Id=x.ProductUnit.UnitID,Text=x.ProductUnit.Type},
+                                CategoryType= new IntegerNullString() { Id = x.Category_CategoryID.CategoryID, Text = x.Category_CategoryID.CategoryName },
                                 TotalProductQuantity = x.TotalProductQuantity,
-                                UserName = x.LoginDetail.UserName,
+                                UserName = x.LoginDetail_LoginID.UserName,
                                 DateTime = x.DateTime,
                             }).ToList()
                 };
@@ -174,15 +172,14 @@ namespace Agriculture.Core.ProductDetail
                             where x.ProductID==ID
                             select new
                             {
-                                ProductID = x.ProductID,
-                                ProductName = x.ProductName,
+                                Product=new IntegerNullString() { Id=x.ProductID,Text=x.ProductName},
                                 Varitey = x.Variety,
                                 Company = x.Company,
                                 Description = x.Description,
-                                Unit = x.Unit,
-                                CategoryName = catid.CategoryName,
+                                Type = new IntegerNullString() { Id = x.ProductUnit.UnitID, Text = x.ProductUnit.Type },
+                                CategoryType = new IntegerNullString() { Id = x.Category_CategoryID.CategoryID, Text = x.Category_CategoryID.CategoryName },
                                 TotalProductQuantity = x.TotalProductQuantity,
-                                UserName = x.LoginDetail.UserName,
+                                UserName = x.LoginDetail_LoginID.UserName,
                                 DateTime = x.DateTime,
                             }).ToList(),
                 };
@@ -219,7 +216,7 @@ namespace Agriculture.Core.ProductDetail
                 pn.Variety = dbobj.Variety;
                 pn.Company = dbobj.Company;
                 pn.CategoryID = dbobj.categorytype.Id;
-                pn.Unit = dbobj.type.Text;
+                pn.UnitID = dbobj.type.Id;
                 pn.Description = dbobj.Description;
                
                 context.SubmitChanges();

@@ -173,13 +173,17 @@ namespace Agriculture.Core.ProductionDetails
                     Status = Result.ResultStatus.success,
                     Message = "View SubArea Successful",
                     Data = (from obj in context.SubAreas
-                            select new
+                            select new 
                             {
-                                SubAreaID = obj.SubAreaID,
-                                SubAreaName = obj.SubAreaName,
-                                MainAreaName = (from ma in context.MainAreas
-                                                where ma.MainAreaID == obj.MainAreaID
-                                                select ma.MainAreaName).SingleOrDefault(),
+                                SubArea=new IntegerNullString() {Id=obj.SubAreaID,Text=obj.SubAreaName },
+                                MainArea= new IntegerNullString() {Id=(from maID in context.MainAreas
+                                                                       where maID.MainAreaID==obj.MainAreaID
+                                                                       select maID.MainAreaID).SingleOrDefault(),
+                                                                   Text= (from ma in context.MainAreas
+                                                                          where ma.MainAreaID == obj.MainAreaID
+                                                                          select ma.MainAreaName).SingleOrDefault()
+
+                                                                        }, 
                                 Remark = obj.Remark,
                                 UserName = (from ld in context.LoginDetails
                                             where ld.LoginID == obj.LoginID
@@ -200,8 +204,7 @@ namespace Agriculture.Core.ProductionDetails
                     Data = (from obj in context.MainAreas
                             select new
                             {
-                                MainAreaID=obj.MainAreaID,
-                                MainAreaName=obj.MainAreaName,
+                                MainArea=new IntegerNullString() { Id=obj.MainAreaID,Text=obj.MainAreaName},
                                 Remark=obj.Remark,
                                 UserName=(from ld in context.LoginDetails
                                          where ld.LoginID==obj.LoginID

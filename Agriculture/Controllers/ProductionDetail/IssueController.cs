@@ -33,7 +33,13 @@ namespace Agriculture.Controllers.ProductionDetail
         {
             return Ok(new Issues().ViewById(ID));
         }
-        /*  [Route("IssueProducts/update/{ID}")]
-          [Route("IssueProducts/delete/{ID}")]*/
+
+        [HttpPut]
+        [Route("IssueProducts/update/{ID}")]
+        public IActionResult Update([FromBody] Models.ProductionDetail.Issue value, [FromRoute] int ID) 
+        {
+            return Ok(new Issues().Update(value,ID));
+        }
+        /*[Route("IssueProducts/delete/{ID}")]*/
     }
 }

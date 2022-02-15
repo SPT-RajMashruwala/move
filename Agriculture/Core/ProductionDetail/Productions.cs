@@ -97,8 +97,8 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-                var qs = (from pd in context.ProductionDetails
-                          join m in context.MainAreas
+                var qs = (from obj in context.ProductionDetails
+                       /*   join m in context.MainAreas
                           on pd.MainAreaID equals m.MainAreaID into JoinTableMA
                           from MA in JoinTableMA.DefaultIfEmpty()
                           join s in context.SubAreas
@@ -106,14 +106,14 @@ namespace Agriculture.Core.ProductionDetails
                           from SA in JoinTableSA.DefaultIfEmpty()
                           join v in context.Vegetables
                           on pd.VegetableID equals v.VegetableID into JoinTableVN
-                          from VN in JoinTableVN.DefaultIfEmpty()
+                          from VN in JoinTableVN.DefaultIfEmpty()*/
                           select new
                           {
-                              ProductionID = pd.ProductionID,
-                              MainAreaName = MA.MainAreaName,
-                              SubAreaName = SA.SubAreaName,
-                              VegetableName = VN.VegetableName,
-                              QuantityOfVegetable = pd.Quantity
+                              ProductionID=obj.ProductionID,
+                              MainArea = new IntegerNullString() { Id =obj.MainArea.MainAreaID,Text =obj.MainArea.MainAreaName },
+                              SubArea = new IntegerNullString() { Id =obj.SubArea.SubAreaID, Text =obj.SubArea.SubAreaName },
+                              VegetableName = new IntegerNullString() { Id =obj.Vegetable.VegetableID, Text =obj.Vegetable.VegetableName },
+                              QuantityOfVegetable = obj.Quantity,
                           }).ToList();
                 var result = new Result()
                 {
@@ -129,8 +129,8 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-                var qs = (from pd in context.ProductionDetails
-                          join m in context.MainAreas
+                var qs = (from obj in context.ProductionDetails
+   /*                       join m in context.MainAreas
                           on pd.MainAreaID equals m.MainAreaID into JoinTableMA
                           from MA in JoinTableMA.DefaultIfEmpty()
                           join s in context.SubAreas
@@ -138,14 +138,15 @@ namespace Agriculture.Core.ProductionDetails
                           from SA in JoinTableSA.DefaultIfEmpty()
                           join v in context.Vegetables
                           on pd.VegetableID equals v.VegetableID into JoinTableVN
-                          from VN in JoinTableVN.DefaultIfEmpty()
-                          where pd.ProductionID == id
+                          from VN in JoinTableVN.DefaultIfEmpty()*/
+                          where obj.ProductionID == id
                           select new
                           {
-                              MainAreaName = MA.MainAreaName,
-                              SubAreaName = SA.SubAreaName,
-                              VegetableName = VN.VegetableName,
-                              QuantityOfVegetable = pd.Quantity
+                              ProductionID = obj.ProductionID,
+                              MainArea = new IntegerNullString() { Id = obj.MainArea.MainAreaID, Text = obj.MainArea.MainAreaName },
+                              SubArea = new IntegerNullString() { Id = obj.SubArea.SubAreaID, Text = obj.SubArea.SubAreaName },
+                              VegetableName = new IntegerNullString() { Id = obj.Vegetable.VegetableID, Text = obj.Vegetable.VegetableName },
+                              QuantityOfVegetable = obj.Quantity
                           }).ToList();
                 var result = new Result()
                 {

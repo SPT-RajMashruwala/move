@@ -81,7 +81,7 @@ namespace Agriculture.Core.ProductionDetails
             {
 
                 var qs = (from obj in context.Issues
-                          join obj2 in context.MainAreas
+                         /* join obj2 in context.MainAreas
                           on obj.MainAreaID equals obj2.MainAreaID into JoinTableMA
                           from MA in JoinTableMA.DefaultIfEmpty()
                           join obj3 in context.SubAreas
@@ -89,14 +89,14 @@ namespace Agriculture.Core.ProductionDetails
                           from SA in JoinTableSA.DefaultIfEmpty()
                           join obj4 in context.Products
                           on obj.ProductID equals obj4.ProductID into JoinTablePD
-                          from PD in JoinTablePD.DefaultIfEmpty()
+                          from PD in JoinTablePD.DefaultIfEmpty()*/
                           where obj.IssueID == ID
                           select new
                           {
                               IssueID = obj.IssueID,
-                              ProductName = PD.ProductName,
-                              MainAreaName = MA.MainAreaName,
-                              SubAreaName = SA.SubAreaName,
+                              Product=new IntegerNullString() { Id=obj.Product.ProductID,Text=obj.Product.ProductName},
+                              MainArea=new IntegerNullString() { Id=obj.MainArea.MainAreaID,Text=obj.MainArea.MainAreaName},
+                              SubAreaName = new IntegerNullString() { Id=obj.SubArea.SubAreaID,Text=obj.SubArea.SubAreaName},
                               IssueQuantity = obj.PurchaseQuantity,
                               Remark = obj.Remark,
                               Date=obj.DateTime,
@@ -117,7 +117,7 @@ namespace Agriculture.Core.ProductionDetails
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
                 var qs = (from obj in context.Issues
-                          join obj2 in context.MainAreas
+                    /*      join obj2 in context.MainAreas
                           on obj.MainAreaID equals obj2.MainAreaID into JoinTableMA
                           from MA in JoinTableMA.DefaultIfEmpty()
                           join obj3 in context.SubAreas
@@ -125,13 +125,13 @@ namespace Agriculture.Core.ProductionDetails
                           from SA in JoinTableSA.DefaultIfEmpty()
                           join obj4 in context.Products
                           on obj.ProductID equals obj4.ProductID into JoinTablePD
-                          from PD in JoinTablePD.DefaultIfEmpty()
+                          from PD in JoinTablePD.DefaultIfEmpty()*/
                           select new
                           {
                               IssueID = obj.IssueID,
-                              ProductName = PD.ProductName,
-                              MainAreaName = MA.MainAreaName,
-                              SubAreaName = SA.SubAreaName,
+                              Product = new IntegerNullString() { Id = obj.Product.ProductID, Text = obj.Product.ProductName },
+                              MainArea = new IntegerNullString() { Id = obj.MainArea.MainAreaID, Text = obj.MainArea.MainAreaName },
+                              SubAreaName = new IntegerNullString() { Id = obj.SubArea.SubAreaID, Text = obj.SubArea.SubAreaName },
                               IssueQuantity = obj.PurchaseQuantity,
                               Remark = obj.Remark,
                               Date = obj.DateTime,
@@ -145,6 +145,150 @@ namespace Agriculture.Core.ProductionDetails
                     Data = qs,
                 };
             }
+        }
+        public Result Update(Models.ProductionDetail.Issue value, int ID)
+        {
+            float RemainQuantity = 0;
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                MAC mac = new MAC();
+                var macObj = mac.GetMacAddress().Result;
+                var MacAddress = context.LoginDetails.FirstOrDefault(c => c.SystemMac == macObj);
+                var qs = (
+                         from obj in context.Issues
+                         where obj.IssueID == ID
+                         select obj).SingleOrDefault();
+                var p = (from obj in value.issueDetails
+                         select obj).SingleOrDefault();
+                var pd = (from obj in context.Products
+                          where obj.ProductID == qs.ProductID
+                          select obj).SingleOrDefault();
+                var ps = (from obj in context.Products
+                          where obj.ProductID == p.Product.Id
+                          select obj).SingleOrDefault();
+                var pid = (from obj in context.Issues
+                           where obj.SubAreaID == value.SubArea.Id
+                           select new
+                           {
+                               ProductID = obj.ProductID
+                           }).ToList();
+
+
+                if (qs.SubAreaID == value.SubArea.Id)
+                {
+                    if (qs.ProductID == p.Product.Id)
+                    {
+                        var temp = pd.TotalProductQuantity + qs.PurchaseQuantity;
+                        RemainQuantity = (float)temp - p.IssueQuantity;
+                        qs.DateTime = DateTime.Now;
+                        qs.ProductID = p.Product.Id;
+                        qs.MainAreaID = value.MainArea.Id;
+                        qs.SubAreaID = value.SubArea.Id;
+                        qs.LoginID = MacAddress.LoginID;
+                        qs.Remark = p.Remark;
+                        qs.PurchaseQuantity = p.IssueQuantity;
+
+                        ps.TotalProductQuantity = RemainQuantity;
+                        context.SubmitChanges();
+                        return new Result()
+                        {
+                            Status=Result.ResultStatus.success,
+                            Message="Issue Update Successfully",
+                            Data=$"Issue ID : {ID} updated successfully",
+                        };
+                    }
+                    else
+                    {
+                        foreach (var item in pid)
+                        {
+                            if (p.Product.Id == item.ProductID)
+                            {
+                                throw new Exception($"Entered Product : {item.ProductID} already issued for given sub" +
+                                    $" area : {value.SubArea.Text}");
+
+                            }
+
+
+
+
+
+                        }
+                        var temp = pd.TotalProductQuantity + qs.PurchaseQuantity;
+                        qs.DateTime = DateTime.Now;
+                        qs.ProductID = p.Product.Id;
+                        qs.MainAreaID = value.MainArea.Id;
+                        qs.SubAreaID = value.SubArea.Id;
+                        qs.LoginID = MacAddress.LoginID;
+                        qs.Remark = p.Remark;
+                        qs.PurchaseQuantity = p.IssueQuantity;
+                        RemainQuantity = (float)ps.TotalProductQuantity - p.IssueQuantity;
+                        ps.TotalProductQuantity = RemainQuantity;
+                        pd.TotalProductQuantity = temp;
+                        context.SubmitChanges();
+                        return new Result()
+                        {
+                            Status = Result.ResultStatus.success,
+                            Message = "Issue Update Successfully",
+                            Data = $"Issue ID : {ID} updated successfully",
+                        };
+                    }
+
+
+
+                }
+                else
+                {
+                    foreach (var item in pid)
+                    {
+                        if (p.Product.Id == item.ProductID)
+                        {
+                            throw new Exception($"Entered Product : {item.ProductID} already issued for given sub" +
+                                $" area : {value.SubArea.Text}");
+
+                        }
+
+
+
+
+                    }
+                    var temp = pd.TotalProductQuantity + qs.PurchaseQuantity;
+                    pd.TotalProductQuantity = temp;
+                    qs.DateTime = DateTime.Now;
+                    qs.ProductID = p.Product.Id;
+                    qs.MainAreaID = value.MainArea.Id;
+                    qs.SubAreaID = value.SubArea.Id;
+                    qs.LoginID = MacAddress.LoginID;
+                    qs.Remark = p.Remark;
+                    qs.PurchaseQuantity = p.IssueQuantity;
+                    RemainQuantity = (float)ps.TotalProductQuantity - p.IssueQuantity;
+                    ps.TotalProductQuantity = RemainQuantity;
+                    context.SubmitChanges();
+                    return new Result()
+                    {
+                        Status = Result.ResultStatus.success,
+                        Message = "Issue Update Successfully",
+                        Data = $"Issue ID : {ID} updated successfully",
+                    };
+
+                }
+
+                /*   qs.DateTime = DateTime.Now;
+                   qs.ProductID = p.Product.Id;
+                   qs.MainAreaID = issueModel.MainArea.Id;
+                   qs.SubAreaID = issueModel.SubArea.Id;
+                   qs.UserLoginID = mac.LoginID;
+                   qs.Remark = p.Remark;
+                   qs.PurchaseQuantity = p.IssueQuantity;
+
+                   ps.TotalProductQuantity = RemainQuantity;
+                   context.SubmitChanges();
+
+                   return "";
+   */
+
+
+            }
+
         }
     }
 }

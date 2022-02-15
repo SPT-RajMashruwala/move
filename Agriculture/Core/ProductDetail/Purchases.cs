@@ -26,9 +26,9 @@ namespace Agriculture.Core.ProductDetail
                                     select new PurchaseDetail()
                                     {
                                         ProductID = obj.productname.Id,
-                                        Unit = (from u in context.Products
+                                        UnitID = (from u in context.Products
                                                 where u.ProductID == obj.productname.Id
-                                                select u.Unit).SingleOrDefault(),
+                                                select u.ProductUnit.UnitID).SingleOrDefault(),
                                         PurchaseDate = obj.Purchasedate.ToLocalTime(),
                                         TotalQuantity = obj.totalquantity,
                                         TotalCost = obj.totalcost,
@@ -72,10 +72,10 @@ namespace Agriculture.Core.ProductDetail
                           select new
                           {
                               PurchaseID = obj.PurchaseID,
-                              ProductName = PN.ProductName,
+                              Product= new IntegerNullString() { Id=obj.Product.ProductID,Text=obj.Product.ProductName},
                               TotalQuantiry = obj.TotalQuantity,
                               TotalCost = obj.TotalCost,
-                              Unit = obj.Unit,
+                              Type=new IntegerNullString() { Id=obj.ProductUnit.UnitID,Text=obj.ProductUnit.Type},
                               Remark = obj.Remark,
                               VendorName = obj.VendorName,
                               PurchaseDate = obj.PurchaseDate,
@@ -104,10 +104,10 @@ namespace Agriculture.Core.ProductDetail
                           select new
                           {
                               PurchaseID = obj.PurchaseID,
-                              ProductName = PN.ProductName,
+                              Product = new IntegerNullString() { Id = obj.Product.ProductID, Text = obj.Product.ProductName },
                               TotalQuantiry = obj.TotalQuantity,
                               TotalCost = obj.TotalCost,
-                              Unit = obj.Unit,
+                              Type = new IntegerNullString() { Id = obj.ProductUnit.UnitID, Text = obj.ProductUnit.Type },
                               Remark = obj.Remark,
                               VendorName = obj.VendorName,
                               PurchaseDate = obj.PurchaseDate,
@@ -129,7 +129,7 @@ namespace Agriculture.Core.ProductDetail
                 var funit = (from obj in value.purchaseList
                              from u in context.Products
                              where obj.productname.Id == u.ProductID
-                             select u.Unit).SingleOrDefault();
+                             select u.ProductUnit.UnitID).SingleOrDefault();
                 var qs = (from obj in context.PurchaseDetails
                           where obj.PurchaseID == ID
                           select obj).SingleOrDefault();
@@ -163,7 +163,7 @@ namespace Agriculture.Core.ProductDetail
                     qs.ProductID = q.productname.Id;
                     qs.TotalQuantity = q.totalquantity;
                     qs.TotalCost = q.totalcost;
-                    qs.Unit = funit;
+                    qs.UnitID = funit;
                     qs.Remark = q.remarks;
                     qs.VendorName = q.vendorname;
                     qs.PurchaseDate = q.Purchasedate.ToLocalTime();
