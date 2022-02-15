@@ -192,6 +192,38 @@ namespace Agriculture.Core.ProductionDetails
                 };
             }
         }
+        public Result ViewSubAreaByID(int ID)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+
+                return new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "View SubArea By ID Successful",
+                    Data = (from obj in context.SubAreas
+                            where obj.SubAreaID==ID
+                            select new
+                            {
+                                SubArea = new IntegerNullString() { Id = obj.SubAreaID, Text = obj.SubAreaName },
+                                MainArea = new IntegerNullString()
+                                {
+                                    Id = (from maID in context.MainAreas
+                                          where maID.MainAreaID == obj.MainAreaID
+                                          select maID.MainAreaID).SingleOrDefault(),
+                                    Text = (from ma in context.MainAreas
+                                            where ma.MainAreaID == obj.MainAreaID
+                                            select ma.MainAreaName).SingleOrDefault()
+
+                                },
+                                Remark = obj.Remark,
+                                UserName = (from ld in context.LoginDetails
+                                            where ld.LoginID == obj.LoginID
+                                            select ld.UserName).SingleOrDefault()
+                            }).ToList(),
+                };
+            }
+        }
         public Result ViewMainArea()
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
@@ -214,6 +246,35 @@ namespace Agriculture.Core.ProductionDetails
                             }).ToList(),
                 };
             }
+        }
+        public Result Update(Models.ProductionDetail.Area value, int ID)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                var sadbobj = (from obj in context.SubAreas
+                               where obj.SubAreaID == ID
+                               select obj).SingleOrDefault();
+                var qs = (from obj in value.arealist
+                          select obj).SingleOrDefault();
+                var q = (from obj in qs.subarea
+                         select obj).SingleOrDefault();
+                var maID = (from obj in context.MainAreas
+                              where obj.MainAreaName == qs.mname
+                              select obj.MainAreaID).SingleOrDefault();
+                var saID = (from obj in context.SubAreas
+                            from obj1 in context.MainAreas
+                            where obj.SubAreaName == q.sname && obj1.MainAreaName == qs.mname
+                            select obj.SubAreaID).SingleOrDefault();
+                if (sadbobj.MainAreaID == maID)
+                {
+                    if (sadbobj.SubAreaID==saID) 
+                    {
+                        
+                        sadbobj.Remark=value.
+                    }
+                }
+            }
+
         }
         public Result DeleteSubArea(int ID)
         {

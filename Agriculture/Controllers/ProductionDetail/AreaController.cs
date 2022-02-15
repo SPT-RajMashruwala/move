@@ -33,6 +33,20 @@ namespace Agriculture.Controllers.ProductionDetail
             return Ok(new Areas().GetSubArea(ID));
         }
 
+        [HttpGet]
+        [Route("Area/viewSubArea")]
+        public IActionResult ViewSubArea() 
+        {
+            return Ok(new Areas().ViewSubArea());
+        }
+
+        [HttpGet]
+        [Route("Area/viewSubAreaByID/{ID}")]
+        public IActionResult ViewSubAreaByID([FromRoute] int ID)
+        {
+            return Ok(new Areas().ViewSubAreaByID(ID));
+        }
+
 
 
         /*  [Route("Area/view")]
