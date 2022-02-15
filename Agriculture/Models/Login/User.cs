@@ -16,8 +16,8 @@ namespace Agriculture.Models.Login
         [Required(ErrorMessage = "EmailAddress Required")]
         public string EmailAddress { get; set; }
 
-        [RegularExpression(@"[A-Za-z][a-z0-9@#_]{6,}[a-z0-9]$", ErrorMessage = "Minimum 8 character," +
-            "Start first letter with uppercase or lower case,one number and one special symbol")]
+        [RegularExpression(@"[A-Za-z0-9][a-z0-9@#_ .]{6,}[a-z0-9@#_.]$", ErrorMessage = "Minimum 8 character," +
+            "First letter not start special character ,atleast one lower case,one number and one special symbol")]
         [Required(ErrorMessage = "Password Required")]
         public string Password { get; set; }
     }

@@ -1,11 +1,237 @@
-﻿using System;
+﻿using Agriculture.Middleware;
+using Agriculture.Models.Common;
+using ProductInventoryContext;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Agriculture.Core.ProductionDetail 
+namespace Agriculture.Core.ProductionDetails 
 {
     public class Areas
     {
+        //New Main Area Add 
+        public Result Add(Models.ProductionDetail.Area value)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                MAC mac = new MAC();
+                var MacObj = mac.GetMacAddress().Result;
+                var macAddress = context.LoginDetails.FirstOrDefault(x => x.SystemMac == MacObj);
+
+                MainArea mainArea = new MainArea();
+                var mn1 = (from m in value.arealist
+                           from y in context.MainAreas
+                           where m.mname == y.MainAreaName
+                           select new
+                           {
+                               MainAreaID = y.MainAreaID,
+                               MainAreaname = y.MainAreaName
+                           }).ToList();
+                foreach (var item in mn1)
+                {
+                    if (mn1.Count() > 0)
+                    {
+                        throw new ArgumentException($"MainAreaName {item.MainAreaname} already Exist");
+                    }
+                };
+
+                var mainarea = (from m in value.arealist
+                                select new MainArea()
+                                {
+                                    MainAreaName = m.mname,
+                                    Remark=m.Remark,
+                                    LoginID=macAddress.LoginID,
+                                    DateTime=DateTime.Now
+                                    
+                                }).ToList();
+                context.MainAreas.InsertAllOnSubmit(mainarea);
+                context.SubmitChanges();
+
+                var mainarea2 = (from m in mainarea
+                                 select new
+                                 {
+                                     MainAreaID = m.MainAreaID,
+                                     MainAreaname = m.MainAreaName
+                                 }).ToList();
+
+                foreach (var item in mainarea2)
+                {
+                    var SD1 = (from m in value.arealist
+                             
+                               from y in m.subarea
+                               where m.mname == item.MainAreaname
+                               select new SubArea()
+                               {
+                                   MainAreaID = item.MainAreaID,
+                                   Remark=y.Remark,
+                                   SubAreaName = y.sname
+
+                               }).ToList();
+                    context.SubAreas.InsertAllOnSubmit(SD1);
+                    context.SubmitChanges();
+                }
+                return new Result()
+                {
+                    Message = string.Format($"Area Added Successfully."),
+                    Status = Result.ResultStatus.success,
+                };
+
+                //foreach (var item in mn1)
+                //{
+                //    var SA = (from m in context.MainAreas
+                //              join s in context.SubAreas
+                //              on m.MainAreaID equals s.MainAreaID
+                //              where m.MainAreaID == item.MainAreaID
+                //              select new
+                //              {
+                //                  MainAreaID = m.MainAreaID,
+                //                  SubAreaName = s.SubAreaName
+                //              }).ToList();
+
+                //    var sd = (from m in areaModel.arealist
+                //              from y in m.subarea
+                //              where m.mname == item.MainAreaname
+                //              select new
+                //              {
+                //                  MainAreaID = item.MainAreaID,
+                //                  SubAreaName = y.sname
+                //              }).ToList().Except(SA);
+
+                //    var _sd = (from m in sd
+                //               from y in areaModel.arealist
+                //               where y.mname == item.MainAreaname
+                //               select new SubArea()
+                //               {
+                //                   MainAreaID = item.MainAreaID,
+                //                   SubAreaName = m.SubAreaName
+                //               }).ToList();
+
+                //    if (_sd.Count() == 0)
+                //    {
+                //        throw new ArgumentException($"MainAreaName {item.MainAreaname} already have SubAreaN{_sd}");
+                //    }
+                //    context.SubAreas.InsertAllOnSubmit(_sd);
+                //    context.SubmitChanges();
+                //}
+                //return new Result()
+                //{
+                //    Message = string.Format($"SubArea Added Successfully."),
+                //    Status = Result.ResultStatus.success,
+                //}; 
+            }
+        }
+        //GetMainArea Dropdown
+        public Result GetMainArea()
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                var result = new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "Get MainArea",
+                    Data = (from x in context.MainAreas
+                            select new IntegerNullString()
+                            {
+                                Id = x.MainAreaID,
+                                Text = x.MainAreaName,
+                            }).ToList(),
+                };
+                return result;
+            }
+        }
+
+        //GetSubArea Dropdown
+        public Result GetSubArea(int ID)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                var result = new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "GetSubArea By MainAreaId",
+                    Data = (from x in context.SubAreas
+                            where x.MainAreaID == ID
+                            select new IntegerNullString()
+                            {
+                                Id = x.SubAreaID,
+                                Text = x.SubAreaName,
+                            }).ToList(),
+                };
+                return result;
+            }
+        }
+        public Result ViewSubArea() 
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+
+                return new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "View SubArea Successful",
+                    Data = (from obj in context.SubAreas
+                            select new
+                            {
+                                SubAreaID = obj.SubAreaID,
+                                SubAreaName = obj.SubAreaName,
+                                MainAreaName = (from ma in context.MainAreas
+                                                where ma.MainAreaID == obj.MainAreaID
+                                                select ma.MainAreaName).SingleOrDefault(),
+                                Remark = obj.Remark,
+                                UserName = (from ld in context.LoginDetails
+                                            where ld.LoginID == obj.LoginID
+                                            select ld.UserName).SingleOrDefault()
+                            }).ToList(),
+                };
+            }
+        }
+        public Result ViewMainArea()
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+
+                return new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "View MainArea Successful",
+                    Data = (from obj in context.MainAreas
+                            select new
+                            {
+                                MainAreaID=obj.MainAreaID,
+                                MainAreaName=obj.MainAreaName,
+                                Remark=obj.Remark,
+                                UserName=(from ld in context.LoginDetails
+                                         where ld.LoginID==obj.LoginID
+                                         select ld.UserName).SingleOrDefault(),
+                                DateTime=obj.DateTime,
+                                
+                            }).ToList(),
+                };
+            }
+        }
+        public Result DeleteSubArea(int ID)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            {
+                var qs = (from obj in context.SubAreas
+                          where obj.SubAreaID == ID
+                          select obj).SingleOrDefault();
+                return new Result()
+                {
+                    Status=Result.ResultStatus.success,
+                    Message="Area Deleted Succesfully",
+                    Data=$"SubArea : {qs.SubAreaName} Deleted Successfully ",
+                };
+            }
+        }
+   /*     public Result DeleteMainArea(int ID) 
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            {
+                var qs = from obj in context.MainAreas
+                         where 
+            }
+        }*/
     }
 }

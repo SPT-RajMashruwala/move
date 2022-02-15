@@ -8,16 +8,21 @@ namespace Agriculture.Models.ProductionDetail
     public class Area
     {
         public List<MainAreaModel> arealist { get; set; } = new List<MainAreaModel>();
+        
+        
+
     }
 
     public class MainAreaModel
     {
         public string mname { get; set; }
+        public string Remark { get; set; }
         public List<SubAreaModel> subarea { get; set; } = new List<SubAreaModel>();
     }
 
     public class SubAreaModel
     {
         public string sname { get; set; }
+        public string Remark { get; set; }
     }
 }

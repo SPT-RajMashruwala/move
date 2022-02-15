@@ -19,6 +19,7 @@ namespace Agriculture.Middleware
         }
         public async Task Invoke(HttpContext context)
         {
+            var hasError = false;
             Result result = new Result();
             try
             {
@@ -26,6 +27,7 @@ namespace Agriculture.Middleware
             }
             catch (ArgumentException e)
             {
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -37,6 +39,7 @@ namespace Agriculture.Middleware
             }
             catch (MethodAccessException e)
             {
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.NotModified;
@@ -48,6 +51,7 @@ namespace Agriculture.Middleware
             }
             catch (UnauthorizedAccessException e)
             {
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -59,6 +63,7 @@ namespace Agriculture.Middleware
             }
             catch (Exception e)
             {
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -70,8 +75,11 @@ namespace Agriculture.Middleware
             }
             finally
             {
+                if(hasError)
+                { 
                 var errorJson = JsonConvert.SerializeObject(result);
                 await context.Response.WriteAsync(errorJson);
+                }
             }
         }
 

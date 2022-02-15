@@ -8,7 +8,7 @@ namespace Agriculture.Models.ProductDetail
 {
     public class Product
     {
-        public List<ProductDetail> ProductDetails { get; set; } = new List<ProductDetail>();
+        public List<ProductDetail> Productlist { get; set; } = new List<ProductDetail>();
     }
     public class ProductDetail
     {
