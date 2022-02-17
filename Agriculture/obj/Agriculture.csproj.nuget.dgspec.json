@@ -96,9 +96,17 @@
               "target": "Package",
               "version": "[5.6.3, )"
             },
+            "System.Data.SqlClient": {
+              "target": "Package",
+              "version": "[4.8.3, )"
+            },
             "System.Management": {
               "target": "Package",
               "version": "[6.0.0, )"
+            },
+            "System.Runtime": {
+              "target": "Package",
+              "version": "[4.3.1, )"
             }
           },
           "imports": [

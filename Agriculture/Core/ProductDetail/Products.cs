@@ -1,8 +1,12 @@
 ﻿using Agriculture.Middleware;
 using Agriculture.Models.Common;
+using Agriculture.Models.ProductDetail;
+using Microsoft.Extensions.Configuration;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,28 +14,40 @@ namespace Agriculture.Core.ProductDetail
 {
     public class Products
     {
+    
+        private readonly IConfiguration _configuration;
+
+        public Products(IConfiguration configuration) 
+        {
+            _configuration = configuration;
+        }
+        public Products() 
+        {
+        }
+
+
         public Result Add(Models.ProductDetail.Product value)
         {
-            
+
             ProductInventoryDataContext context = new ProductInventoryDataContext();
             MAC mac = new MAC();
             var macObj = mac.GetMacAddress().Result;
             var MacAddress = context.LoginDetails.FirstOrDefault(x => x.SystemMac == macObj);
-            Category category = new Category();
-            Product product = new Product();
+           /* ProductInveCategory category = new Category();
+            Product product = new Product();*/
 
             var pro = (from p in value.Productlist
-                       select new Product()
+                       select new ProductInventoryContext.Product()
                        {
-                           ProductName = p.ProductName,
+                           ProductName = p.productDetail.Text,
                            Variety = p.Variety,
                            Company = p.Company,
                            Description = p.Description,
                            CategoryID = (int)p.categorytype.Id,
-                           UnitID = (int)p.type.Id,
+                           UnitID = (int)p.Type.Id,
                            TotalProductQuantity = 0,
-                           LoginID=MacAddress.LoginID,
-                           DateTime=DateTime.Now,
+                           LoginID = MacAddress.LoginID,
+                           DateTime = DateTime.Now,
                        }).ToList();
             foreach (var item in pro)
             {
@@ -48,7 +64,7 @@ namespace Agriculture.Core.ProductDetail
             {
                 Message = string.Format($"Products Added Successfully."),
                 Status = Result.ResultStatus.success,
-                Data =$"Total {pro.Count()} Product Added",
+                Data = $"Total {pro.Count()} Product Added",
             };
 
             //var pname = context.Products.Where(name => name.ProductName == productModel.ProductName).SingleOrDefault();
@@ -104,20 +120,11 @@ namespace Agriculture.Core.ProductDetail
                     Data = (from x in context.Products
                             select new
                             {
-                               /* ProductID=x.ProductID,
-                                ProductName=x.ProductName,
-                                Variety=x.Variety,
-                                Company=x.Company,
-                                Description=x.Description,
-                                Unit=x.Unit,
-                                Category=x.Category,
-                                TotalProductQuantity=x.TotalProductQuantity
-                                UserName=x.LoginDetail
-                                DateTime=*/
+                          
 
                                 Id = x.ProductID,
                                 Text = x.ProductName,
-                                Type=new IntegerNullString() { Id=x.ProductUnit.UnitID,Text=x.ProductUnit.Type},
+                                Type = new IntegerNullString() { Id = x.ProductUnit.UnitID, Text = x.ProductUnit.Type },
                                 TotalQuantity = (float)x.TotalProductQuantity,
                             }).ToList(),
                 };
@@ -129,24 +136,70 @@ namespace Agriculture.Core.ProductDetail
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
+                Models.ProductDetail.Product product = new Models.ProductDetail.Product()
+                {
+                    Productlist = new List<ProductListClass>()
+                };
+                var qs = (from obj in context.Products
+                          select obj).ToList();
+                foreach (var x in qs) {
+                    product.Productlist.Add(new Models.ProductDetail.ProductListClass
+                    {
+                        productDetail = new IntegerNullString() { Id=x.ProductID,Text=x.ProductName},
+                        categorytype= new IntegerNullString() { Id=x.Category_CategoryID.CategoryID,Text=x.Category_CategoryID.CategoryName},
+                        Company=x.Company,
+                        Description=x.Description,
+                        Type=new IntegerNullString() { Id=x.ProductUnit.UnitID,Text=x.ProductUnit.Type},
+                        Variety=x.Variety,
+                        
+                    });
+                }
+                
                 var result = new Result()
                 {
                     Status = Result.ResultStatus.success,
                     Message = "ViewProduct Successful",
-                    Data = (from x in context.Products
-                            
-                            select new
-                            {
-                                Product = new IntegerNullString() { Id = x.ProductID, Text = x.ProductName },
-                                Varitey = x.Variety,
-                                Company = x.Company,
-                                Description = x.Description,
-                                Type = new IntegerNullString() {Id=x.ProductUnit.UnitID,Text=x.ProductUnit.Type},
-                                CategoryType= new IntegerNullString() { Id = x.Category_CategoryID.CategoryID, Text = x.Category_CategoryID.CategoryName },
-                                TotalProductQuantity = x.TotalProductQuantity,
-                                UserName = x.LoginDetail_LoginID.UserName,
-                                DateTime = x.DateTime,
-                            }).ToList()
+                    Data = product,
+                   
+                };
+                return result;
+            }
+        }
+        public Result ViewSearch(DataTable table)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                Models.ProductDetail.Product product = new Models.ProductDetail.Product()
+                {
+                    Productlist = new List<ProductListClass>()
+                };
+
+                
+                for (int i=0; i<table.Rows.Count;i++) 
+                {
+                    DataRow dr = table.Rows[i];
+                
+                    product.Productlist.Add(new ProductListClass 
+                    {
+                      
+                        categorytype = new IntegerNullString() { Id = Int16.Parse(dr["CategoryID"].ToString()), Text = dr["CategoryName"].ToString() },
+                        Description = dr["Description"].ToString(),
+                        Type = new IntegerNullString() { Id = Int16.Parse(dr["UnitID"].ToString()), Text = dr["Type"].ToString() },
+                        Variety = dr["Variety"].ToString(),
+                        Company= dr["Company"].ToString(),
+                        
+                    });
+                    product.LoginDetail.Text= dr["UserName"].ToString();
+                }
+
+                var result = new Result()
+                {
+
+
+                    Status = Result.ResultStatus.success,
+                    Message = "View Product Successful",
+                    Data = product,
+                        
                 };
                 return result;
             }
@@ -156,38 +209,39 @@ namespace Agriculture.Core.ProductDetail
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-                Product product = new Product();
-                product = context.Products.SingleOrDefault(x => x.ProductID == ID);
-                if (product == null)
+                Models.ProductDetail.Product product = new Models.ProductDetail.Product()
                 {
-                    throw new ArgumentException("Product Does Not Exist");
+                    Productlist = new List<ProductListClass>()
+                };
+                var qs = (from obj in context.Products
+                          where obj.ProductID==ID
+                          select obj).ToList();
+                foreach (var x in qs)
+                {
+                    product.Productlist.Add(new Models.ProductDetail.ProductListClass
+                    {
+                        productDetail = new IntegerNullString() { Id = x.ProductID, Text = x.ProductName },
+                        categorytype = new IntegerNullString() { Id = x.Category_CategoryID.CategoryID, Text = x.Category_CategoryID.CategoryName },
+                        Company = x.Company,
+                        Description = x.Description,
+                        Type = new IntegerNullString() { Id = x.ProductUnit.UnitID, Text = x.ProductUnit.Type },
+                        Variety = x.Variety,
+
+                    });
                 }
+
                 var result = new Result()
                 {
                     Status = Result.ResultStatus.success,
-                    Message = "View Product ByID Successful",
-                    Data = (from x in context.Products
-                            join catid in context.Categories
-                            on x.CategoryID equals catid.CategoryID
-                            where x.ProductID==ID
-                            select new
-                            {
-                                Product=new IntegerNullString() { Id=x.ProductID,Text=x.ProductName},
-                                Varitey = x.Variety,
-                                Company = x.Company,
-                                Description = x.Description,
-                                Type = new IntegerNullString() { Id = x.ProductUnit.UnitID, Text = x.ProductUnit.Type },
-                                CategoryType = new IntegerNullString() { Id = x.Category_CategoryID.CategoryID, Text = x.Category_CategoryID.CategoryName },
-                                TotalProductQuantity = x.TotalProductQuantity,
-                                UserName = x.LoginDetail_LoginID.UserName,
-                                DateTime = x.DateTime,
-                            }).ToList(),
+                    Message = "ViewProduct Successful",
+                    Data = product,
+
                 };
                 return result;
             }
         }
 
-        public Result Update(Models.ProductDetail.Product value , int id)
+        public Result Update(Models.ProductDetail.Product value, int id)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -197,28 +251,28 @@ namespace Agriculture.Core.ProductDetail
                 var pn = (from obj in context.Products
                           where obj.ProductID == id
                           select obj).SingleOrDefault();
-                
-                if (pn==null)
+
+                if (pn == null)
                 {
                     throw new ArgumentException("Product doesn't exist");
                 }
 
-                if ( pn.ProductName != dbobj.ProductName)
+                if (pn.ProductName != dbobj.productDetail.Text)
                 {
-                    var _product = context.Products.SingleOrDefault(name => name.ProductName == dbobj.ProductName);
+                    var _product = context.Products.SingleOrDefault(name => name.ProductName == dbobj.productDetail.Text);
                     if (_product != null)
                     {
                         throw new Exception("Product Alredy Exits.");
                     }
                 }
 
-                pn.ProductName = dbobj.ProductName;
+                pn.ProductName = dbobj.productDetail.Text;
                 pn.Variety = dbobj.Variety;
                 pn.Company = dbobj.Company;
                 pn.CategoryID = dbobj.categorytype.Id;
-                pn.UnitID = dbobj.type.Id;
+                pn.UnitID = dbobj.Type.Id;
                 pn.Description = dbobj.Description;
-               
+
                 context.SubmitChanges();
                 return new Result()
                 {
@@ -229,21 +283,21 @@ namespace Agriculture.Core.ProductDetail
             }
         }
 
-        public Result Delete(int ID) 
+        public Result Delete(int ID)
         {
-            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
                 var qs = (from obj in context.Products
                           where obj.ProductID == ID
                           select obj).SingleOrDefault();
-        
+
                 context.Products.DeleteOnSubmit(qs);
                 context.SubmitChanges();
                 return new Result()
                 {
-                    Status=Result.ResultStatus.success,
-                    Message="Product Deleted Succesfully",
-                    Data=qs.ProductName,
+                    Status = Result.ResultStatus.success,
+                    Message = "Product Deleted Succesfully",
+                    Data = qs.ProductName,
                 };
             }
         }

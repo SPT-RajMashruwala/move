@@ -1,8 +1,10 @@
 ﻿using Agriculture.Middleware;
 using Agriculture.Models.Common;
+using Agriculture.Models.Search;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +12,7 @@ namespace Agriculture.Core.ProductionDetails
 {
     public class Productions
     {
+        public List<SearchProduction> SearchProductions = new List<SearchProduction>();
         public Result Add(Models.ProductionDetail.Production value)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
@@ -124,7 +127,39 @@ namespace Agriculture.Core.ProductionDetails
                 return result;
             }
         }
+        public Result ViewSearch(DataTable table) 
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            {
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    DataRow dr = table.Rows[i];
+                    SearchProductions.Add(new Models.Search.SearchProduction
+                    {
 
+                        ProductionID= Int16.Parse(dr["ProductionID"].ToString()),
+                        MainAreaName = dr["MainAreaName"].ToString(),
+                        SubAreaName = dr["SubAreaName"].ToString(), 
+                        VegetableName= dr["VegetableName"].ToString(),
+                        Quantity= float.Parse(dr["Quantity"].ToString()),
+                        Remark = dr["Remark"].ToString(),
+                        UserName = dr["UserName"].ToString(),
+                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
+
+
+
+                    });
+
+                }
+                var result = new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "View Production Details",
+                    Data = SearchProductions,
+                };
+                return result;
+            }
+        }
         public Result ViewById(int id)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())

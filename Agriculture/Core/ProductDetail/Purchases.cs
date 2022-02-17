@@ -1,8 +1,11 @@
 ﻿using Agriculture.Middleware;
 using Agriculture.Models.Common;
+using Agriculture.Models.ProductDetail;
+using Agriculture.Models.Search;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +13,7 @@ namespace Agriculture.Core.ProductDetail
 {
     public class Purchases
     {
+       
         
         public Result Add(Models.ProductDetail.Purchase value)
         {
@@ -65,30 +69,89 @@ namespace Agriculture.Core.ProductDetail
             {
                 PurchaseDetail purchaseDetail = new PurchaseDetail();
 
+                Models.ProductDetail.Purchase purchase = new Models.ProductDetail.Purchase()
+                {
+                    purchaseList = new List<Models.ProductDetail.PurchaseList>(),
+                    
+                    
+                      
+                };
                 var qs = (from obj in context.PurchaseDetails
-                          join obj2 in context.Products
-                          on obj.ProductID equals obj2.ProductID into JoinTablePN
-                          from PN in JoinTablePN.DefaultIfEmpty()
-                          select new
-                          {
-                              PurchaseID = obj.PurchaseID,
-                              Product= new IntegerNullString() { Id=obj.Product.ProductID,Text=obj.Product.ProductName},
-                              TotalQuantiry = obj.TotalQuantity,
-                              TotalCost = obj.TotalCost,
-                              Type=new IntegerNullString() { Id=obj.ProductUnit.UnitID,Text=obj.ProductUnit.Type},
-                              Remark = obj.Remark,
-                              VendorName = obj.VendorName,
-                              PurchaseDate = obj.PurchaseDate,
-                          }).ToList();
+                         select obj).ToList();
+                foreach (var x in qs) 
+                {
+                    purchase.purchaseList.Add(new Models.ProductDetail.PurchaseList
+                    {
+                        productname=new IntegerNullString() { Id=x.Product.ProductID,Text=x.Product.ProductName},
+                        totalcost=(float)x.TotalCost,
+                        totalquantity=(float)x.TotalQuantity,
+                        remarks=x.Remark,
+                        Purchasedate=Convert.ToDateTime(x.PurchaseDate),
+                        vendorname=x.VendorName,
+                        DateTime=Convert.ToDateTime(x.DateTime),
+                        LoginDetail=new IntegerNullString() { Id=x.LoginDetail.LoginID,Text=x.LoginDetail.UserName},
+                        Type=new IntegerNullString() { Id=x.ProductUnit.UnitID,Text=x.ProductUnit.Type},
+                        
+                    });
+                }
                 var result = new Result()
                 {
                     Status=Result.ResultStatus.success,
                     Message="Purchse Details",
-                    Data=qs,
+                    Data=purchase,
                 };
                 return result;
             }
 
+        }
+        public Result ViewSearch(DataTable table)
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+
+                Models.ProductDetail.Purchase purchase = new Models.ProductDetail.Purchase()
+                {
+                    purchaseList = new List<Models.ProductDetail.PurchaseList>(),
+
+
+
+                };
+
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    DataRow dr = table.Rows[i];
+                    purchase.purchaseList.Add(new Models.ProductDetail.PurchaseList
+                    {
+
+                       
+                        
+                        
+
+
+                        productname = new IntegerNullString(){ Id=Int16.Parse(dr["ProductID"].ToString()),Text=dr["ProductName"].ToString()},
+                        totalquantity = float.Parse(dr["TotalQuantity"].ToString()),
+                        totalcost = float.Parse(dr["TotalQuantity"].ToString()),
+                        vendorname = dr["VendorName"].ToString(),
+                        Purchasedate = Convert.ToDateTime(dr["PurchaseDate"].ToString()),
+                        remarks = dr["Remark"].ToString(),
+                        LoginDetail = new IntegerNullString(){Id=Int16.Parse(dr["LoginID"].ToString()),Text=dr["UserName"].ToString() },
+                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
+                        Type = new IntegerNullString(){Id=Int16.Parse(dr["UnitID"].ToString()),Text=dr["Type"].ToString() },
+
+
+                    });
+                    purchase.PurchaseID = Int16.Parse(dr["PurchaseID"].ToString());
+
+                }
+
+                var result = new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "Purchse Details",
+                    Data = purchase,
+                };
+                return result;
+            }
         }
         public Result ViewById(int Id)
         {
@@ -96,27 +159,35 @@ namespace Agriculture.Core.ProductDetail
             {
                 PurchaseDetail purchaseDetail = new PurchaseDetail();
 
+                Models.ProductDetail.Purchase purchase = new Models.ProductDetail.Purchase()
+                {
+                    purchaseList = new List<Models.ProductDetail.PurchaseList>()
+
+                };
                 var qs = (from obj in context.PurchaseDetails
-                          join obj2 in context.Products
-                          on obj.ProductID equals obj2.ProductID into JoinTablePN
-                          from PN in JoinTablePN.DefaultIfEmpty()
-                          where obj.PurchaseID == Id
-                          select new
-                          {
-                              PurchaseID = obj.PurchaseID,
-                              Product = new IntegerNullString() { Id = obj.Product.ProductID, Text = obj.Product.ProductName },
-                              TotalQuantiry = obj.TotalQuantity,
-                              TotalCost = obj.TotalCost,
-                              Type = new IntegerNullString() { Id = obj.ProductUnit.UnitID, Text = obj.ProductUnit.Type },
-                              Remark = obj.Remark,
-                              VendorName = obj.VendorName,
-                              PurchaseDate = obj.PurchaseDate,
-                          }).ToList();
+                          where obj.PurchaseID==Id
+                          select obj).ToList();
+                foreach (var x in qs)
+                {
+                    purchase.purchaseList.Add(new Models.ProductDetail.PurchaseList
+                    {
+                        productname = new IntegerNullString() { Id = x.Product.ProductID, Text = x.Product.ProductName },
+                        totalcost = (float)x.TotalCost,
+                        totalquantity = (float)x.TotalQuantity,
+                        remarks = x.Remark,
+                        Purchasedate = Convert.ToDateTime(x.PurchaseDate),
+                        vendorname = x.VendorName,
+                        DateTime = Convert.ToDateTime(x.DateTime),
+                        LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName },
+                        Type = new IntegerNullString() { Id = x.ProductUnit.UnitID, Text = x.ProductUnit.Type },
+
+                    });
+                }
                 var result = new Result()
                 {
                     Status = Result.ResultStatus.success,
-                    Message = "Purchse Details by ID",
-                    Data = qs,
+                    Message = "Purchse Details",
+                    Data = purchase,
                 };
                 return result;
             }

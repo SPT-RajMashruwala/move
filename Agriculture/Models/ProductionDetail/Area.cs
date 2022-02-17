@@ -15,14 +15,14 @@ namespace Agriculture.Models.ProductionDetail
 
     public class MainAreaModel
     {
-        public string mname { get; set; }
-        public string Remark { get; set; }
-        public List<SubAreaModel> subarea { get; set; } = new List<SubAreaModel>();
+        public Models.Common.IntegerNullString mainArea = new Common.IntegerNullString();
+       
+        public List<SubAreaModel> subarealist { get; set; } = new List<SubAreaModel>();
     }
 
     public class SubAreaModel
     {
-        public string sname { get; set; }
-        public string Remark { get; set; }
+        public Models.Common.IntegerNullString subArea = new Common.IntegerNullString();
+
     }
 }

@@ -8,9 +8,12 @@ namespace Agriculture.Models.ProductDetail
 {
     public class Category
     {
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Please Enter Character or Letter.")]
-        [Required(ErrorMessage = "CategoryName Required.")]
-        public string CategoryName { get; set; }
+       /* [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Please Enter Character or Letter.")]
+        [Required(ErrorMessage = "CategoryName Required.")]*/
+
+        public Models.Common.IntegerNullString categoryType { get; set; } = new Common.IntegerNullString();
+        public Models.Common.IntegerNullString loginDetail { get; set; } = new Common.IntegerNullString();
         public string Description { get; set; }
+        public DateTime DateTime { get; set; }
     }
 }

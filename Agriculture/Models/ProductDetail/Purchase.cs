@@ -8,6 +8,7 @@ namespace Agriculture.Models.ProductDetail
 {
     public class Purchase
     {
+        public int PurchaseID { get; set; }
         public List<PurchaseList> purchaseList { get; set; } = new List<PurchaseList>();
     }
 
@@ -25,6 +26,10 @@ namespace Agriculture.Models.ProductDetail
         public float totalcost { get; set; }
         public string remarks { get; set; }
         public string vendorname { get; set; }
+        public Models.Common.IntegerNullString LoginDetail { get; set; } = new Common.IntegerNullString();
+        public Models.Common.IntegerNullString Type { get; set; } = new Common.IntegerNullString();
+        public DateTime DateTime { get; set; }
+
         public Models.Common.IntegerNullString productname { get; set; } = new Models.Common.IntegerNullString();
     }
 }

@@ -1,8 +1,10 @@
 ﻿using Agriculture.Middleware;
 using Agriculture.Models.Common;
+using Agriculture.Models.Search;
 using ProductInventoryContext;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +12,7 @@ namespace Agriculture.Core.ProductionDetails
 {
     public class Areas
     {
+        public List<SearchArea> searchAreas = new List<SearchArea>();
         //New Main Area Add 
         public Result Add(Models.ProductionDetail.Area value)
         {
@@ -22,7 +25,7 @@ namespace Agriculture.Core.ProductionDetails
                 MainArea mainArea = new MainArea();
                 var mn1 = (from m in value.arealist
                            from y in context.MainAreas
-                           where m.mname == y.MainAreaName
+                           where m.mainArea.Text == y.MainAreaName
                            select new
                            {
                                MainAreaID = y.MainAreaID,
@@ -39,8 +42,8 @@ namespace Agriculture.Core.ProductionDetails
                 var mainarea = (from m in value.arealist
                                 select new MainArea()
                                 {
-                                    MainAreaName = m.mname,
-                                    Remark=m.Remark,
+                                    MainAreaName = m.mainArea.Text,
+                                   
                                     LoginID=macAddress.LoginID,
                                     DateTime=DateTime.Now
                                     
@@ -59,13 +62,13 @@ namespace Agriculture.Core.ProductionDetails
                 {
                     var SD1 = (from m in value.arealist
                              
-                               from y in m.subarea
-                               where m.mname == item.MainAreaname
+                               from y in m.subarealist
+                               where m.mainArea.Text == item.MainAreaname
                                select new SubArea()
                                {
                                    MainAreaID = item.MainAreaID,
-                                   Remark=y.Remark,
-                                   SubAreaName = y.sname,
+                                   
+                                   SubAreaName = y.subArea.Text,
                                    LoginID = macAddress.LoginID,
                                    DateTime = DateTime.Now
 
@@ -167,6 +170,11 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
+                Models.ProductionDetail.MainAreaModel subarea = new Models.ProductionDetail.MainAreaModel()
+                {
+                    subarealist = new List<Models.ProductionDetail.SubAreaModel>()
+                };
+             
 
                 return new Result()
                 {
@@ -189,6 +197,36 @@ namespace Agriculture.Core.ProductionDetails
                                             where ld.LoginID == obj.LoginID
                                             select ld.UserName).SingleOrDefault()
                             }).ToList(),
+                };
+            }
+        }
+        public Result ViewSearch(DataTable table) 
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+            {
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    DataRow dr = table.Rows[i];
+                    searchAreas.Add(new Models.Search.SearchArea
+                    {
+                       
+                        SubAreaID= Int16.Parse(dr["SubAreaID"].ToString()),
+                        SubAreaName= dr["SubAreaName"].ToString(),
+                        MainAreaName= dr["MainAreaName"].ToString(),
+                        Remark = dr["Remark"].ToString(),
+                        UserName = dr["UserName"].ToString(),
+                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
+                        
+
+
+                    });
+
+                }
+                return new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "View SubArea Successful",
+                    Data = searchAreas,
                 };
             }
         }
@@ -247,7 +285,7 @@ namespace Agriculture.Core.ProductionDetails
                 };
             }
         }
-        public Result Update(Models.ProductionDetail.Area value, int ID)
+      /*  public Result Update(Models.ProductionDetail.Area value, int ID)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -267,15 +305,15 @@ namespace Agriculture.Core.ProductionDetails
                             select obj.SubAreaID).SingleOrDefault();
                 if (sadbobj.MainAreaID == maID)
                 {
-                    if (sadbobj.SubAreaID==saID) 
+               *//*     if (sadbobj.SubAreaID==saID) 
                     {
                         
                         sadbobj.Remark=value.
-                    }
+                    }*//*
                 }
             }
 
-        }
+        }*/
         public Result DeleteSubArea(int ID)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 

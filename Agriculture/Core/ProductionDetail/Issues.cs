@@ -1,9 +1,11 @@
 ﻿using Agriculture.Middleware;
 using Agriculture.Models.Common;
+using Agriculture.Models.Search;
 using ProductInventoryContext;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,6 +13,7 @@ namespace Agriculture.Core.ProductionDetails
 {
     public class Issues
     {
+        public List<SearchIssue> searchIssues = new List<SearchIssue>();
         public Result Add(Models.ProductionDetail.Issue value)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
@@ -145,6 +148,41 @@ namespace Agriculture.Core.ProductionDetails
                     Data = qs,
                 };
             }
+        }
+        public Result ViewSearch(DataTable table) 
+        {
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            {
+                for (int i = 0; i < table.Rows.Count; i++)
+                {
+                    DataRow dr = table.Rows[i];
+                    searchIssues.Add(new Models.Search.SearchIssue
+                    {
+                      
+                        IssueID = Int16.Parse(dr["IssueID"].ToString()),
+                        IssueDate= Convert.ToDateTime(dr["IssueDate"].ToString()),
+                        MainAreaName= dr["MainAreaName"].ToString(),
+                        SubAreaName= dr["SubAreaName"].ToString(),
+                        ProductName= dr["ProductName"].ToString(),
+                        PurchaseQuantity=float.Parse(dr["PurchaseQuantity"].ToString()),
+                        Remark = dr["Remark"].ToString(),
+                        UserName = dr["UserName"].ToString(),
+                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
+                        
+
+
+                    });
+
+                }
+                return new Result()
+                {
+                    Status = Result.ResultStatus.success,
+                    Message = "Issue View",
+                    Data = searchIssues,
+                };
+
+            }
+
         }
         public Result Update(Models.ProductionDetail.Issue value, int ID)
         {
