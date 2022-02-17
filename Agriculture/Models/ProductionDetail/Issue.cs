@@ -13,6 +13,8 @@ namespace Agriculture.Models.ProductionDetail
         [Required(ErrorMessage = "Date Is Required.")]
         public DateTime Date { get; set; }
         public List<IssueDetail> issueDetails { get; set; } = new List<IssueDetail>();
+        public DateTime DateTime { get; set; }
+        public Models.Common.IntegerNullString LoginDetail { get; set; } = new Common.IntegerNullString();
 
     }
 

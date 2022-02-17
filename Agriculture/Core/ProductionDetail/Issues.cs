@@ -13,7 +13,7 @@ namespace Agriculture.Core.ProductionDetails
 {
     public class Issues
     {
-        public List<SearchIssue> searchIssues = new List<SearchIssue>();
+        /*public List<SearchIssue> searchIssues = new List<SearchIssue>();*/
         public Result Add(Models.ProductionDetail.Issue value)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
@@ -33,8 +33,8 @@ namespace Agriculture.Core.ProductionDetails
                               LoginID = LoginID.LoginID,
                               DateTime = DateTime.Now,
                               PurchaseQuantity = obj.IssueQuantity,
-                              IssueDate=value.Date.ToLocalTime(),
-                              
+                              IssueDate = value.Date.ToLocalTime(),
+
 
                           }).ToList();
                 var mainArea = (from obj in context.MainAreas
@@ -47,13 +47,13 @@ namespace Agriculture.Core.ProductionDetails
                              select obj.TotalProductQuantity).SingleOrDefault();
                     if (p < item.PurchaseQuantity)
                     {
-                        var pname =(from obj in context.Products
-                         where obj.ProductID == item.ProductID
-                         select obj.ProductName).SingleOrDefault();
+                        var pname = (from obj in context.Products
+                                     where obj.ProductID == item.ProductID
+                                     select obj.ProductName).SingleOrDefault();
                         throw new ArgumentException($"Product name : {pname} ," +
                             $"Enter quantity : {item.PurchaseQuantity} more than existing quantity {p}");
                     }
-                   
+
 
                 }
 
@@ -82,108 +82,108 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
-
+                Models.ProductionDetail.Issue issue = new Models.ProductionDetail.Issue()
+                {
+                    issueDetails = new List<Models.ProductionDetail.IssueDetail>()
+                };
                 var qs = (from obj in context.Issues
-                         /* join obj2 in context.MainAreas
-                          on obj.MainAreaID equals obj2.MainAreaID into JoinTableMA
-                          from MA in JoinTableMA.DefaultIfEmpty()
-                          join obj3 in context.SubAreas
-                          on obj.SubAreaID equals obj3.SubAreaID into JoinTableSA
-                          from SA in JoinTableSA.DefaultIfEmpty()
-                          join obj4 in context.Products
-                          on obj.ProductID equals obj4.ProductID into JoinTablePD
-                          from PD in JoinTablePD.DefaultIfEmpty()*/
                           where obj.IssueID == ID
-                          select new
-                          {
-                              IssueID = obj.IssueID,
-                              Product=new IntegerNullString() { Id=obj.Product.ProductID,Text=obj.Product.ProductName},
-                              MainArea=new IntegerNullString() { Id=obj.MainArea.MainAreaID,Text=obj.MainArea.MainAreaName},
-                              SubAreaName = new IntegerNullString() { Id=obj.SubArea.SubAreaID,Text=obj.SubArea.SubAreaName},
-                              IssueQuantity = obj.PurchaseQuantity,
-                              Remark = obj.Remark,
-                              Date=obj.DateTime,
+                          select obj).ToList();
+                foreach (var x in qs)
+                {
+                    issue.issueDetails.Add(new Models.ProductionDetail.IssueDetail()
+                    {
+                        IssueQuantity = (float)x.PurchaseQuantity,
+                        Product = new IntegerNullString() { Id = x.Product.ProductID, Text = x.Product.ProductName },
+                        Remark = x.Remark,
+                    });
+                    issue.Date = Convert.ToDateTime(x.IssueDate);
+                    issue.MainArea = new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName };
+                    issue.SubArea = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName };
+                    issue.DateTime = Convert.ToDateTime(x.DateTime);
+                }
 
-
-                          }).ToList();
                 return new Result()
                 {
-                    Status=Result.ResultStatus.success,
-                    Message="Issue ViewByID",
-                    Data=qs,
+                    Status = Result.ResultStatus.success,
+                    Message = "Issue View",
+                    Data = issue,
                 };
-
             }
         }
         public Result View()
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
+                Models.ProductionDetail.Issue issue = new Models.ProductionDetail.Issue()
+                {
+                    issueDetails = new List<Models.ProductionDetail.IssueDetail>()
+                };
                 var qs = (from obj in context.Issues
-                    /*      join obj2 in context.MainAreas
-                          on obj.MainAreaID equals obj2.MainAreaID into JoinTableMA
-                          from MA in JoinTableMA.DefaultIfEmpty()
-                          join obj3 in context.SubAreas
-                          on obj.SubAreaID equals obj3.SubAreaID into JoinTableSA
-                          from SA in JoinTableSA.DefaultIfEmpty()
-                          join obj4 in context.Products
-                          on obj.ProductID equals obj4.ProductID into JoinTablePD
-                          from PD in JoinTablePD.DefaultIfEmpty()*/
-                          select new
-                          {
-                              IssueID = obj.IssueID,
-                              Product = new IntegerNullString() { Id = obj.Product.ProductID, Text = obj.Product.ProductName },
-                              MainArea = new IntegerNullString() { Id = obj.MainArea.MainAreaID, Text = obj.MainArea.MainAreaName },
-                              SubAreaName = new IntegerNullString() { Id = obj.SubArea.SubAreaID, Text = obj.SubArea.SubAreaName },
-                              IssueQuantity = obj.PurchaseQuantity,
-                              Remark = obj.Remark,
-                              Date = obj.DateTime,
+                          select obj).ToList();
+                foreach (var x in qs)
+                {
+                    issue.issueDetails.Add(new Models.ProductionDetail.IssueDetail()
+                    {
+                        IssueQuantity = (float)x.PurchaseQuantity,
+                        Product = new IntegerNullString() { Id = x.Product.ProductID, Text = x.Product.ProductName },
+                        Remark = x.Remark,
+                    });
+                    issue.Date = Convert.ToDateTime(x.IssueDate);
+                    issue.MainArea = new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName };
+                    issue.SubArea = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName };
+                    issue.DateTime = Convert.ToDateTime(x.DateTime);
+                }
 
-
-                          }).ToList();
                 return new Result()
                 {
                     Status = Result.ResultStatus.success,
                     Message = "Issue View",
-                    Data = qs,
+                    Data = issue,
                 };
             }
         }
-        public Result ViewSearch(DataTable table) 
+        public Result ViewSearch(DataTable table)
         {
-            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
+                Models.ProductionDetail.Issue issue = new Models.ProductionDetail.Issue()
+                {
+                    issueDetails = new List<Models.ProductionDetail.IssueDetail>()
+                };
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     DataRow dr = table.Rows[i];
-                    searchIssues.Add(new Models.Search.SearchIssue
+                    issue.issueDetails.Add(new Models.ProductionDetail.IssueDetail()
                     {
-                      
-                        IssueID = Int16.Parse(dr["IssueID"].ToString()),
-                        IssueDate= Convert.ToDateTime(dr["IssueDate"].ToString()),
-                        MainAreaName= dr["MainAreaName"].ToString(),
-                        SubAreaName= dr["SubAreaName"].ToString(),
-                        ProductName= dr["ProductName"].ToString(),
-                        PurchaseQuantity=float.Parse(dr["PurchaseQuantity"].ToString()),
+                        IssueQuantity = float.Parse(dr["PurchaseQuantity"].ToString()),
+                        Product = new IntegerNullString() { Id = Int16.Parse(dr["ProductID"].ToString()), Text = dr["ProductName"].ToString() },
                         Remark = dr["Remark"].ToString(),
-                        UserName = dr["UserName"].ToString(),
-                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
-                        
-
-
                     });
+                    issue.Date = Convert.ToDateTime(dr["IssueDate"].ToString());
+                    issue.MainArea = new IntegerNullString() { Id = Int16.Parse(dr["MainAreaID"].ToString()), Text = dr["MainAreaName"].ToString() };
+                    issue.SubArea = new IntegerNullString() { Id = Int16.Parse(dr["SubAreaID"].ToString()), Text = dr["SubAreaName"].ToString() };
+                    issue.DateTime = Convert.ToDateTime(dr["DateTime"].ToString());
+                    issue.LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() };
+
 
                 }
-                return new Result()
-                {
-                    Status = Result.ResultStatus.success,
-                    Message = "Issue View",
-                    Data = searchIssues,
-                };
 
+
+
+
+            return new Result()
+            {
+                Status = Result.ResultStatus.success,
+                Message = "Issue View",
+                Data = issue,
+            };
             }
 
         }
+
+    
+
         public Result Update(Models.ProductionDetail.Issue value, int ID)
         {
             float RemainQuantity = 0;

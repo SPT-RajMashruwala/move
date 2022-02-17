@@ -12,7 +12,7 @@ namespace Agriculture.Core.ProductionDetails
 {
     public class Productions
     {
-        public List<SearchProduction> SearchProductions = new List<SearchProduction>();
+
         public Result Add(Models.ProductionDetail.Production value)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
@@ -24,7 +24,7 @@ namespace Agriculture.Core.ProductionDetails
 
                 var vn1 = (from m in value.ProductionLists
                            from y in context.Vegetables
-                           where m.Vegetablenm.ToLower() == y.VegetableName.ToLower()
+                           where m.vegetable.Text.ToLower() == y.VegetableName.ToLower()
                            select new
                            {
                                VegetableName = y.VegetableName
@@ -34,7 +34,7 @@ namespace Agriculture.Core.ProductionDetails
                     var vegetablename = (from m in value.ProductionLists
                                          select new Vegetable()
                                          {
-                                             VegetableName = m.Vegetablenm
+                                             VegetableName = m.vegetable.Text
                                          }).ToList();
                     context.Vegetables.InsertAllOnSubmit(vegetablename);
                     context.SubmitChanges();
@@ -53,7 +53,7 @@ namespace Agriculture.Core.ProductionDetails
                                           MainAreaID = m.mainAreaDetails.Id,
                                           SubAreaID = m.subAreaDetails.Id,
                                           VegetableID = (from obj in context.Vegetables
-                                                         where obj.VegetableName == m.Vegetablenm
+                                                         where obj.VegetableName == m.vegetable.Text
                                                          select obj.VegetableID).SingleOrDefault(),
                                           Quantity = m.Quantity,
                                           Remark = m.Remark,
@@ -100,29 +100,33 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
+                Models.ProductionDetail.Production production = new Models.ProductionDetail.Production()
+                {
+                    ProductionLists=new List<Models.ProductionDetail.ProductionList>()
+                };
                 var qs = (from obj in context.ProductionDetails
-                       /*   join m in context.MainAreas
-                          on pd.MainAreaID equals m.MainAreaID into JoinTableMA
-                          from MA in JoinTableMA.DefaultIfEmpty()
-                          join s in context.SubAreas
-                          on pd.SubAreaID equals s.SubAreaID into JoinTableSA
-                          from SA in JoinTableSA.DefaultIfEmpty()
-                          join v in context.Vegetables
-                          on pd.VegetableID equals v.VegetableID into JoinTableVN
-                          from VN in JoinTableVN.DefaultIfEmpty()*/
-                          select new
-                          {
-                              ProductionID=obj.ProductionID,
-                              MainArea = new IntegerNullString() { Id =obj.MainArea.MainAreaID,Text =obj.MainArea.MainAreaName },
-                              SubArea = new IntegerNullString() { Id =obj.SubArea.SubAreaID, Text =obj.SubArea.SubAreaName },
-                              VegetableName = new IntegerNullString() { Id =obj.Vegetable.VegetableID, Text =obj.Vegetable.VegetableName },
-                              QuantityOfVegetable = obj.Quantity,
-                          }).ToList();
+                          select obj).ToList();
+                foreach(var x in qs) 
+                {
+                    production.ProductionLists.Add(new Models.ProductionDetail.ProductionList()
+                    {
+                        mainAreaDetails=new IntegerNullString() { Id=x.MainArea.MainAreaID,Text=x.MainArea.MainAreaName},
+                        Quantity=(float)x.Quantity,
+                        Remark=x.Remark,
+                        subAreaDetails= new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName },
+                        vegetable = new IntegerNullString() { Id = x.Vegetable.VegetableID, Text = x.Vegetable.VegetableName },
+
+                    });
+                    production.DateTime =Convert.ToDateTime(x.DateTime);
+                    production.LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName };
+                }
+
+                
                 var result = new Result()
                 {
                     Status = Result.ResultStatus.success,
                     Message = "View Production Details",
-                    Data = qs,
+                    Data = production,
                 };
                 return result;
             }
@@ -131,31 +135,31 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
             {
+                Models.ProductionDetail.Production production = new Models.ProductionDetail.Production()
+                {
+                    ProductionLists=new List<Models.ProductionDetail.ProductionList>()
+                };
                 for (int i = 0; i < table.Rows.Count; i++)
                 {
                     DataRow dr = table.Rows[i];
-                    SearchProductions.Add(new Models.Search.SearchProduction
+                    production.ProductionLists.Add(new Models.ProductionDetail.ProductionList()
                     {
-
-                        ProductionID= Int16.Parse(dr["ProductionID"].ToString()),
-                        MainAreaName = dr["MainAreaName"].ToString(),
-                        SubAreaName = dr["SubAreaName"].ToString(), 
-                        VegetableName= dr["VegetableName"].ToString(),
-                        Quantity= float.Parse(dr["Quantity"].ToString()),
+                        mainAreaDetails = new IntegerNullString(){ Id = Int16.Parse(dr["MainAreaID"].ToString()), Text = dr["MainAreaName"].ToString() },
+                        Quantity = float.Parse(dr["Quantity"].ToString()),
                         Remark = dr["Remark"].ToString(),
-                        UserName = dr["UserName"].ToString(),
-                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
-
-
+                        subAreaDetails = new IntegerNullString() { Id = Int16.Parse(dr["SubAreaID"].ToString()), Text = dr["SubAreaName"].ToString() },
+                        vegetable = new IntegerNullString() { Id = Int16.Parse(dr["VegetableID"].ToString()), Text = dr["VegetableName"].ToString() },
 
                     });
+                    production.DateTime = Convert.ToDateTime(dr["DateTime"].ToString());
+                    production.LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() };
 
                 }
                 var result = new Result()
                 {
                     Status = Result.ResultStatus.success,
                     Message = "View Production Details",
-                    Data = SearchProductions,
+                    Data = production,
                 };
                 return result;
             }
@@ -164,30 +168,34 @@ namespace Agriculture.Core.ProductionDetails
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
+                Models.ProductionDetail.Production production = new Models.ProductionDetail.Production()
+                {
+                    ProductionLists = new List<Models.ProductionDetail.ProductionList>()
+                };
                 var qs = (from obj in context.ProductionDetails
-   /*                       join m in context.MainAreas
-                          on pd.MainAreaID equals m.MainAreaID into JoinTableMA
-                          from MA in JoinTableMA.DefaultIfEmpty()
-                          join s in context.SubAreas
-                          on pd.SubAreaID equals s.SubAreaID into JoinTableSA
-                          from SA in JoinTableSA.DefaultIfEmpty()
-                          join v in context.Vegetables
-                          on pd.VegetableID equals v.VegetableID into JoinTableVN
-                          from VN in JoinTableVN.DefaultIfEmpty()*/
-                          where obj.ProductionID == id
-                          select new
-                          {
-                              ProductionID = obj.ProductionID,
-                              MainArea = new IntegerNullString() { Id = obj.MainArea.MainAreaID, Text = obj.MainArea.MainAreaName },
-                              SubArea = new IntegerNullString() { Id = obj.SubArea.SubAreaID, Text = obj.SubArea.SubAreaName },
-                              VegetableName = new IntegerNullString() { Id = obj.Vegetable.VegetableID, Text = obj.Vegetable.VegetableName },
-                              QuantityOfVegetable = obj.Quantity
-                          }).ToList();
+                          where obj.ProductionID==id 
+                          select obj).ToList();
+                foreach (var x in qs)
+                {
+                    production.ProductionLists.Add(new Models.ProductionDetail.ProductionList()
+                    {
+                        mainAreaDetails = new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName },
+                        Quantity = (float)x.Quantity,
+                        Remark = x.Remark,
+                        subAreaDetails = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName },
+                        vegetable = new IntegerNullString() { Id = x.Vegetable.VegetableID, Text = x.Vegetable.VegetableName },
+
+                    });
+                    production.DateTime = Convert.ToDateTime(x.DateTime);
+                    production.LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName };
+                }
+
+
                 var result = new Result()
                 {
                     Status = Result.ResultStatus.success,
-                    Message = "View Production by ID Details",
-                    Data = qs,
+                    Message = "View Production Details",
+                    Data = production,
                 };
                 return result;
             }
@@ -203,7 +211,7 @@ namespace Agriculture.Core.ProductionDetails
                 var mac = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
                 var vn1 = (from m in value.ProductionLists
                            from y in context.Vegetables
-                           where m.Vegetablenm.ToLower() == y.VegetableName.ToLower()
+                           where m.vegetable.Text.ToLower() == y.VegetableName.ToLower()
                            select new
                            {
                                VegetableName = y.VegetableName
@@ -213,7 +221,7 @@ namespace Agriculture.Core.ProductionDetails
                     var vegetablename = (from m in value.ProductionLists
                                          select new Vegetable()
                                          {
-                                             VegetableName = m.Vegetablenm
+                                             VegetableName = m.vegetable.Text
                                          }).ToList();
                     context.Vegetables.InsertAllOnSubmit(vegetablename);
                     context.SubmitChanges();
@@ -221,7 +229,7 @@ namespace Agriculture.Core.ProductionDetails
 
                 var vg = (from m in value.ProductionLists
                           from y in context.Vegetables
-                          where m.Vegetablenm.ToLower() == y.VegetableName.ToLower()
+                          where m.vegetable.Text.ToLower() == y.VegetableName.ToLower()
                           select new
                           {
                               VegetableID = y.VegetableID
@@ -254,7 +262,7 @@ namespace Agriculture.Core.ProductionDetails
                     {
                         Message = "Production Updated Successfully",
                         Status = Result.ResultStatus.success,
-                        Data = qs.Vegetablenm
+                        Data = qs.vegetable.Text
                     };
                 }
                 else
@@ -285,7 +293,7 @@ namespace Agriculture.Core.ProductionDetails
                         {
                             Message = "Production Updated Successfully",
                             Status = Result.ResultStatus.success,
-                            Data = qs.Vegetablenm
+                            Data = qs.vegetable.Text
                         };
                     }
 

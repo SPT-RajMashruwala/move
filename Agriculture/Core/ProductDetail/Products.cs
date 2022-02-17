@@ -145,6 +145,7 @@ namespace Agriculture.Core.ProductDetail
                 foreach (var x in qs) {
                     product.Productlist.Add(new Models.ProductDetail.ProductListClass
                     {
+                        
                         productDetail = new IntegerNullString() { Id=x.ProductID,Text=x.ProductName},
                         categorytype= new IntegerNullString() { Id=x.Category_CategoryID.CategoryID,Text=x.Category_CategoryID.CategoryName},
                         Company=x.Company,
@@ -153,6 +154,7 @@ namespace Agriculture.Core.ProductDetail
                         Variety=x.Variety,
                         
                     });
+                    product.LoginDetail = new IntegerNullString() { Id = x.LoginDetail_LoginID.LoginID, Text = x.LoginDetail_LoginID.UserName };
                 }
                 
                 var result = new Result()

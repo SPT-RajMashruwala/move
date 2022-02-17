@@ -8,7 +8,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Agriculture.Core.ProductionDetails 
+namespace Agriculture.Core.ProductionDetails
 {
     public class Areas
     {
@@ -43,10 +43,10 @@ namespace Agriculture.Core.ProductionDetails
                                 select new MainArea()
                                 {
                                     MainAreaName = m.mainArea.Text,
-                                   
-                                    LoginID=macAddress.LoginID,
-                                    DateTime=DateTime.Now
-                                    
+
+                                    LoginID = macAddress.LoginID,
+                                    DateTime = DateTime.Now
+
                                 }).ToList();
                 context.MainAreas.InsertAllOnSubmit(mainarea);
                 context.SubmitChanges();
@@ -61,13 +61,13 @@ namespace Agriculture.Core.ProductionDetails
                 foreach (var item in mainarea2)
                 {
                     var SD1 = (from m in value.arealist
-                             
+
                                from y in m.subarealist
                                where m.mainArea.Text == item.MainAreaname
                                select new SubArea()
                                {
                                    MainAreaID = item.MainAreaID,
-                                   
+
                                    SubAreaName = y.subArea.Text,
                                    LoginID = macAddress.LoginID,
                                    DateTime = DateTime.Now
@@ -166,7 +166,7 @@ namespace Agriculture.Core.ProductionDetails
                 return result;
             }
         }
-        public Result ViewSubArea() 
+        public Result ViewSubArea()
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -174,33 +174,34 @@ namespace Agriculture.Core.ProductionDetails
                 {
                     subarealist = new List<Models.ProductionDetail.SubAreaModel>()
                 };
-             
+
 
                 return new Result()
                 {
                     Status = Result.ResultStatus.success,
                     Message = "View SubArea Successful",
                     Data = (from obj in context.SubAreas
-                            select new 
+                            select new
                             {
-                                SubArea=new IntegerNullString() {Id=obj.SubAreaID,Text=obj.SubAreaName },
-                                MainArea= new IntegerNullString() {Id=(from maID in context.MainAreas
-                                                                       where maID.MainAreaID==obj.MainAreaID
-                                                                       select maID.MainAreaID).SingleOrDefault(),
-                                                                   Text= (from ma in context.MainAreas
-                                                                          where ma.MainAreaID == obj.MainAreaID
-                                                                          select ma.MainAreaName).SingleOrDefault()
+                                SubArea = new IntegerNullString() { Id = obj.SubAreaID, Text = obj.SubAreaName },
+                                MainArea = new IntegerNullString()
+                                {
+                                    Id = (from maID in context.MainAreas
+                                          where maID.MainAreaID == obj.MainAreaID
+                                          select maID.MainAreaID).SingleOrDefault(),
+                                    Text = (from ma in context.MainAreas
+                                            where ma.MainAreaID == obj.MainAreaID
+                                            select ma.MainAreaName).SingleOrDefault()
 
-                                                                        }, 
+                                },
                                 Remark = obj.Remark,
-                                UserName = (from ld in context.LoginDetails
-                                            where ld.LoginID == obj.LoginID
-                                            select ld.UserName).SingleOrDefault()
+                                LoginDetail = new IntegerNullString() { Id = obj.LoginDetail.LoginID, Text = obj.LoginDetail.UserName },
+                                DateTime = obj.DateTime,
                             }).ToList(),
                 };
             }
         }
-        public Result ViewSearch(DataTable table) 
+        public Result ViewSearch(DataTable table)
         {
             using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
@@ -209,14 +210,15 @@ namespace Agriculture.Core.ProductionDetails
                     DataRow dr = table.Rows[i];
                     searchAreas.Add(new Models.Search.SearchArea
                     {
+                        LoginDetail=new IntegerNullString() {Id= Int16.Parse(dr["LoginID"].ToString()), Text= dr["UserName"].ToString() },
+                        mainArea= new IntegerNullString() { Id = Int16.Parse(dr["MainAreaID"].ToString()), Text = dr["MainAreaName"].ToString() },
+                        subArea= new IntegerNullString() { Id = Int16.Parse(dr["SubAreaID"].ToString()), Text = dr["SubAreaName"].ToString() },
+
                        
-                        SubAreaID= Int16.Parse(dr["SubAreaID"].ToString()),
-                        SubAreaName= dr["SubAreaName"].ToString(),
-                        MainAreaName= dr["MainAreaName"].ToString(),
                         Remark = dr["Remark"].ToString(),
-                        UserName = dr["UserName"].ToString(),
+                     
                         DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
-                        
+
 
 
                     });
@@ -240,7 +242,7 @@ namespace Agriculture.Core.ProductionDetails
                     Status = Result.ResultStatus.success,
                     Message = "View SubArea By ID Successful",
                     Data = (from obj in context.SubAreas
-                            where obj.SubAreaID==ID
+                            where obj.SubAreaID == ID
                             select new
                             {
                                 SubArea = new IntegerNullString() { Id = obj.SubAreaID, Text = obj.SubAreaName },
@@ -255,9 +257,8 @@ namespace Agriculture.Core.ProductionDetails
 
                                 },
                                 Remark = obj.Remark,
-                                UserName = (from ld in context.LoginDetails
-                                            where ld.LoginID == obj.LoginID
-                                            select ld.UserName).SingleOrDefault()
+                                LoginDetail = new IntegerNullString() { Id = obj.LoginDetail.LoginID, Text = obj.LoginDetail.UserName },
+                                DateTime = obj.DateTime,
                             }).ToList(),
                 };
             }
@@ -274,49 +275,48 @@ namespace Agriculture.Core.ProductionDetails
                     Data = (from obj in context.MainAreas
                             select new
                             {
-                                MainArea=new IntegerNullString() { Id=obj.MainAreaID,Text=obj.MainAreaName},
-                                Remark=obj.Remark,
-                                UserName=(from ld in context.LoginDetails
-                                         where ld.LoginID==obj.LoginID
-                                         select ld.UserName).SingleOrDefault(),
-                                DateTime=obj.DateTime,
-                                
+                                MainArea = new IntegerNullString() { Id = obj.MainAreaID, Text = obj.MainAreaName },
+                                Remark = obj.Remark,
+                                UserName = (from ld in context.LoginDetails
+                                            where ld.LoginID == obj.LoginID
+                                            select ld.UserName).SingleOrDefault(),
+                                DateTime = obj.DateTime,
+
                             }).ToList(),
                 };
             }
         }
-      /*  public Result Update(Models.ProductionDetail.Area value, int ID)
-        {
-            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
-            {
-                var sadbobj = (from obj in context.SubAreas
-                               where obj.SubAreaID == ID
-                               select obj).SingleOrDefault();
-                var qs = (from obj in value.arealist
-                          select obj).SingleOrDefault();
-                var q = (from obj in qs.subarea
-                         select obj).SingleOrDefault();
-                var maID = (from obj in context.MainAreas
-                              where obj.MainAreaName == qs.mname
-                              select obj.MainAreaID).SingleOrDefault();
-                var saID = (from obj in context.SubAreas
-                            from obj1 in context.MainAreas
-                            where obj.SubAreaName == q.sname && obj1.MainAreaName == qs.mname
-                            select obj.SubAreaID).SingleOrDefault();
-                if (sadbobj.MainAreaID == maID)
-                {
-               *//*     if (sadbobj.SubAreaID==saID) 
-                    {
-                        
-                        sadbobj.Remark=value.
-                    }*//*
-                }
-            }
+        /*  public Result Update(Models.ProductionDetail.Area value, int ID)
+          {
+              using (ProductInventoryDataContext context = new ProductInventoryDataContext())
+              {
+                  var sadbobj = (from obj in context.SubAreas
+                                 where obj.SubAreaID == ID
+                                 select obj).SingleOrDefault();
+                  var qs = (from obj in value.arealist
+                            select obj).SingleOrDefault();
+                  var q = (from obj in qs.subarea
+                           select obj).SingleOrDefault();
+                  var maID = (from obj in context.MainAreas
+                                where obj.MainAreaName == qs.mname
+                                select obj.MainAreaID).SingleOrDefault();
+                  var saID = (from obj in context.SubAreas
+                              from obj1 in context.MainAreas
+                              where obj.SubAreaName == q.sname && obj1.MainAreaName == qs.mname
+                              select obj.SubAreaID).SingleOrDefault();
+                  if (sadbobj.MainAreaID == maID)
+                  {
+                 *//*     if (sadbobj.SubAreaID==saID) 
+                      {
 
-        }*/
+                          sadbobj.Remark=value.
+                      }*//*
+                  }
+              }
+          }*/
         public Result DeleteSubArea(int ID)
         {
-            using (ProductInventoryDataContext context = new ProductInventoryDataContext()) 
+            using (ProductInventoryDataContext context = new ProductInventoryDataContext())
             {
                 var qs = (from obj in context.SubAreas
                           where obj.SubAreaID == ID
@@ -325,9 +325,9 @@ namespace Agriculture.Core.ProductionDetails
                 context.SubmitChanges();
                 return new Result()
                 {
-                    Status=Result.ResultStatus.success,
-                    Message="Area Deleted Succesfully",
-                    Data=$"SubArea : {qs.SubAreaName} Deleted Successfully ",
+                    Status = Result.ResultStatus.success,
+                    Message = "Area Deleted Succesfully",
+                    Data = $"SubArea : {qs.SubAreaName} Deleted Successfully ",
                 };
             }
         }
@@ -347,9 +347,9 @@ namespace Agriculture.Core.ProductionDetails
 
                 return new Result()
                 {
-                    Status=Result.ResultStatus.success,
-                    Message="Main Area Along With Allocated Subarea succesfully Deleted",
-                    Data=$"Main Area : {qs.MainAreaID} and its all Subarea Deleted ",
+                    Status = Result.ResultStatus.success,
+                    Message = "Main Area Along With Allocated Subarea succesfully Deleted",
+                    Data = $"Main Area : {qs.MainAreaID} and its all Subarea Deleted ",
                 };
             }
         }
