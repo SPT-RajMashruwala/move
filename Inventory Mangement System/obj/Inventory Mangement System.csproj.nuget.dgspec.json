@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\Inventory Mangement System.csproj": {}
+    "D:\\Agricultural\\Inventory Mangement System\\Inventory Mangement System.csproj": {}
   },
   "projects": {
-    "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\Inventory Mangement System.csproj": {
+    "D:\\Agricultural\\Inventory Mangement System\\Inventory Mangement System.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\Inventory Mangement System.csproj",
+        "projectUniqueName": "D:\\Agricultural\\Inventory Mangement System\\Inventory Mangement System.csproj",
         "projectName": "Inventory Mangement System",
-        "projectPath": "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\Inventory Mangement System.csproj",
+        "projectPath": "D:\\Agricultural\\Inventory Mangement System\\Inventory Mangement System.csproj",
         "packagesPath": "C:\\Users\\SMARTY\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\obj\\",
+        "outputPath": "D:\\Agricultural\\Inventory Mangement System\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\SMARTY\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -42,7 +42,7 @@
           "dependencies": {
             "Devart.Data.SqlServer.Linq": {
               "target": "Package",
-              "version": "[4.9.2379, )"
+              "version": "[4.9.2403, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",

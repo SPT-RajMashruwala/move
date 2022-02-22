@@ -1,4 +1,5 @@
 ﻿
+using Inventory_Mangement_System.Model.Common;
 using Inventory_Mangement_System.serevices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -25,8 +26,12 @@ namespace Inventory_Mangement_System.Controllers
         }
 
         [HttpPost("Refresh")]
-        public async Task<IActionResult> Refresh(string token, string refreshToken)
+        public async Task<IActionResult> Refresh(TokenModel tokenModel)
         {
+            string token = tokenModel.Token;
+            string refreshToken = tokenModel.RefreshToken;
+
+
             var principal = _tokenService.GetPrincipalFromExpiredToken(token);
             var emailid = principal.Identity.Name;
 

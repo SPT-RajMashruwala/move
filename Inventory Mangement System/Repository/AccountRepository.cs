@@ -148,27 +148,27 @@ namespace Inventory_Mangement_System.Repository
                 /*UserLoginDetails login = new UserLoginDetails();*/
                 LoginDetail l = new LoginDetail();
 
-                var mac = (from obj in context.LoginDetails
-                           where obj.SystemMac == UserMACAddress
-                           select obj).ToList();
-                if (mac.Count() > 0)
-                {
-                    var Lid = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
-                    Lid.DateTime = DateTime.Now;
-                    context.SubmitChanges();
+                //var mac = (from obj in context.LoginDetails
+                //           where obj.SystemMac == UserMACAddress
+                //           select obj).ToList();
+                //if (mac.Count() > 0)
+                //{
+                //    var Lid = context.LoginDetails.FirstOrDefault(c => c.SystemMac == UserMACAddress);
+                //    Lid.DateTime = DateTime.Now;
+                //    context.SubmitChanges();
 
 
-                }
-                else
-                {
+                //}
+                //else
+                //{
 
-                    l.UserName = qs;
-                    l.SystemMac = UserMACAddress;
-                    l.DateTime = DateTime.Now;
-                    context.LoginDetails.InsertOnSubmit(l);
-                    context.SubmitChanges();
-                }
-                
+                l.UserName = qs;
+                l.SystemMac = UserMACAddress;
+                l.DateTime = DateTime.Now;
+                context.LoginDetails.InsertOnSubmit(l);
+                context.SubmitChanges();
+                //}
+
                 return new Result()
                 {
                     Message = string.Format($"Login Successfully"),

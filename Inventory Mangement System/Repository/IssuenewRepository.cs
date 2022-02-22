@@ -34,7 +34,7 @@ namespace Inventory_Mangement_System.Repository
                               MainAreaID = issueModel.MainArea.Id,
                               SubAreaID = issueModel.SubArea.Id,
                               Remark =obj.Remark,
-                              UserLoginID=LoginID.LoginID,
+                              LoginID=LoginID.LoginID,
                               DateTime=DateTime.Now,
                               PurchaseQuantity = obj.IssueQuantity
 
@@ -161,7 +161,7 @@ namespace Inventory_Mangement_System.Repository
                         qs.ProductID = p.Product.Id;
                         qs.MainAreaID = issueModel.MainArea.Id;
                         qs.SubAreaID = issueModel.SubArea.Id;
-                        qs.UserLoginID = mac.LoginID;
+                        qs.LoginID = mac.LoginID;
                         qs.Remark = p.Remark;
                         qs.PurchaseQuantity = p.IssueQuantity;
 
@@ -190,7 +190,7 @@ namespace Inventory_Mangement_System.Repository
                                 qs.ProductID = p.Product.Id;
                                 qs.MainAreaID = issueModel.MainArea.Id;
                                 qs.SubAreaID = issueModel.SubArea.Id;
-                                qs.UserLoginID = mac.LoginID;
+                                qs.LoginID = mac.LoginID;
                                 qs.Remark = p.Remark;
                                 qs.PurchaseQuantity = p.IssueQuantity;
                                 RemainQuantity = (float)ps.TotalProductQuantity - p.IssueQuantity;
@@ -224,7 +224,7 @@ namespace Inventory_Mangement_System.Repository
                             qs.ProductID = p.Product.Id;
                             qs.MainAreaID = issueModel.MainArea.Id;
                             qs.SubAreaID = issueModel.SubArea.Id;
-                            qs.UserLoginID = mac.LoginID;
+                            qs.LoginID = mac.LoginID;
                             qs.Remark = p.Remark;
                             qs.PurchaseQuantity = p.IssueQuantity;
                             RemainQuantity = (float)ps.TotalProductQuantity - p.IssueQuantity;

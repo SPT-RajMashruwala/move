@@ -30,6 +30,18 @@ namespace Inventory_Mangement_System
         public IConfiguration Configuration { get; }
         public void ConfigureServices(IServiceCollection services)
         {
+           services.AddCors(options =>
+        {
+            options.AddPolicy("MyPolicy",
+                              builder =>
+                              {
+                                  builder.SetIsOriginAllowed(host => true)
+                                  .AllowAnyMethod()
+                                  .AllowAnyHeader()
+                                  .AllowCredentials();
+                              });
+        });
+
             services.AddTransient <IAccountRepository,AccountRepository >();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IProductRepository, ProductRepository>();
@@ -48,10 +60,6 @@ namespace Inventory_Mangement_System
                 option.JsonSerializerOptions.Converters.Add(new DateConverter());
                 
              });
-            services.AddCors(option =>
-            {
-                option.AddDefaultPolicy(builder => builder.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
-            });
 
             services.AddAuthentication(option =>
             {
@@ -84,12 +92,8 @@ namespace Inventory_Mangement_System
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors(builder => builder
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .SetIsOriginAllowed((host) => true)
-            .AllowCredentials()
-            );
+            app.UseCors("MyPolicy");
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

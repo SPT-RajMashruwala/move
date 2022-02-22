@@ -35,7 +35,7 @@ namespace Inventory_Mangement_System.Repository
                                         TotalCost = obj.totalcost,
                                         Remark = obj.remarks,
                                         VendorName = obj.vendorname,
-                                        UserLoginID = LoginID.LoginID,
+                                        LoginID = LoginID.LoginID,
                                         DateTime = DateTime.Now
 
 

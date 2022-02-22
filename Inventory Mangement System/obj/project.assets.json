@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net5.0": {
-      "Devart.Data.Linq/4.9.2379": {
+      "Devart.Data.Linq/4.9.2403": {
         "type": "package",
         "dependencies": {
           "Microsoft.Win32.Registry": "4.5.0",
@@ -18,10 +18,10 @@
           "lib/netstandard2.0/Devart.Data.Linq.dll": {}
         }
       },
-      "Devart.Data.SqlServer.Linq/4.9.2379": {
+      "Devart.Data.SqlServer.Linq/4.9.2403": {
         "type": "package",
         "dependencies": {
-          "Devart.Data.Linq": "4.9.2379",
+          "Devart.Data.Linq": "4.9.2403",
           "System.Data.SqlClient": "4.4.0"
         },
         "compile": {
@@ -2059,28 +2059,28 @@
     }
   },
   "libraries": {
-    "Devart.Data.Linq/4.9.2379": {
-      "sha512": "Wvw/DzHu8/elG62oScwBn16vPE7W7D4aYFzm1W82EbC+O8Pk94Uefi22WiXF5jfi/8aJRVf5ZxzPilV711J1Tw==",
+    "Devart.Data.Linq/4.9.2403": {
+      "sha512": "lO5OmXnDpFdLDB6MPfhIL8tDb958ica3zv5BjpWXJKBJb2SNVAZ0c47yaLWToUbNvtBPoHGmIRu9Lk4M46clyA==",
       "type": "package",
-      "path": "devart.data.linq/4.9.2379",
+      "path": "devart.data.linq/4.9.2403",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "devart.data.linq.4.9.2379.nupkg.sha512",
+        "devart.data.linq.4.9.2403.nupkg.sha512",
         "devart.data.linq.nuspec",
         "lc.png",
         "lib/netstandard1.3/Devart.Data.Linq.dll",
         "lib/netstandard2.0/Devart.Data.Linq.dll"
       ]
     },
-    "Devart.Data.SqlServer.Linq/4.9.2379": {
-      "sha512": "AQFDarifJF1mAJb+XdvPXnk/oXwc9zQSupQUs+UF8MzcW826QiHAbWp3UpDOiXye4CHGsgjd2tIJuK4kK46vnQ==",
+    "Devart.Data.SqlServer.Linq/4.9.2403": {
+      "sha512": "fq+Kyn/C9OVnTKU2LdCTbR8cJrILgv71vgpSYKnzU42GyZrc5zwO/CTPX4S0LxmLSdC0LGCP6h8dyBCrcseePw==",
       "type": "package",
-      "path": "devart.data.sqlserver.linq/4.9.2379",
+      "path": "devart.data.sqlserver.linq/4.9.2403",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "devart.data.sqlserver.linq.4.9.2379.nupkg.sha512",
+        "devart.data.sqlserver.linq.4.9.2403.nupkg.sha512",
         "devart.data.sqlserver.linq.nuspec",
         "lc.png",
         "lib/netstandard1.3/Devart.Data.SqlServer.Linq.dll",
@@ -6833,7 +6833,7 @@
   },
   "projectFileDependencyGroups": {
     "net5.0": [
-      "Devart.Data.SqlServer.Linq >= 4.9.2379",
+      "Devart.Data.SqlServer.Linq >= 4.9.2403",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 5.0.0",
       "Microsoft.AspNetCore.Identity >= 2.2.0",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 5.0.0",
@@ -6854,11 +6854,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\Inventory Mangement System.csproj",
+      "projectUniqueName": "D:\\Agricultural\\Inventory Mangement System\\Inventory Mangement System.csproj",
       "projectName": "Inventory Mangement System",
-      "projectPath": "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\Inventory Mangement System.csproj",
+      "projectPath": "D:\\Agricultural\\Inventory Mangement System\\Inventory Mangement System.csproj",
       "packagesPath": "C:\\Users\\SMARTY\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\SMARTY\\Desktop\\FinalAPI\\Agricultural-Project-Backend-\\Inventory Mangement System\\obj\\",
+      "outputPath": "D:\\Agricultural\\Inventory Mangement System\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\SMARTY\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -6889,7 +6889,7 @@
         "dependencies": {
           "Devart.Data.SqlServer.Linq": {
             "target": "Package",
-            "version": "[4.9.2379, )"
+            "version": "[4.9.2403, )"
           },
           "Microsoft.AspNetCore.Authentication.JwtBearer": {
             "target": "Package",

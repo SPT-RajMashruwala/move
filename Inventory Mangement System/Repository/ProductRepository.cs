@@ -33,8 +33,7 @@ namespace Inventory_Mangement_System.Repository
             product.Unit = (string)productModel.type.Text;
             product.TotalProductQuantity = 0;
             product.CategoryID = (int)productModel.categorytype.Id;
-            product.Remark = productModel.Remark;
-            product.UserLoginID = (from obj in context.LoginDetails
+           product.LoginID = (from obj in context.LoginDetails
                                    where obj.SystemMac == MacAddress
                                    select obj.LoginID).SingleOrDefault();
             product.DateTime = DateTime.Now;

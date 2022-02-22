@@ -53,10 +53,10 @@ namespace Inventory_Mangement_System.Repository
                                           VegetableID = (from obj in context.Vegetables
                                                          where obj.VegetableName == m.vegetablenm
                                                          select obj.VegetableID).SingleOrDefault(),
-                                          QuantityOfVegetable = m.Quantity,
+                                          Quantity = m.Quantity,
                                           Remark = m.Remark,
                                           DateTime = DateTime.Now,
-                                          UserLoginID = mac.LoginID
+                                          LoginID = mac.LoginID
 
                                       }).ToList();
                 context.ProductionDetails.InsertAllOnSubmit(productionlist);
@@ -98,12 +98,12 @@ namespace Inventory_Mangement_System.Repository
                       select new
                       {
                        
-                          ProductionID=obj.ProductID,
+                          ProductionID=obj.ProductionID,
                           MainAreaName = MA.MainAreaName,
 
                           SubAreaName = SA.SubAreaName,
                           VegetableName = VN.VegetableName,
-                          QuantityOfVegetable = obj.QuantityOfVegetable
+                          QuantityOfVegetable = obj.Quantity
 
                       }).ToList();
             return qs;
@@ -124,7 +124,7 @@ namespace Inventory_Mangement_System.Repository
                       join obj4 in context.Vegetables
                       on obj.VegetableID equals obj4.VegetableID into JoinTableVN
                       from VN in JoinTableVN.DefaultIfEmpty()
-                      where obj.ProductID == id
+                      where obj.ProductionID == id
                       select new
                       {
                           
@@ -132,7 +132,7 @@ namespace Inventory_Mangement_System.Repository
 
                           SubAreaName = SA.SubAreaName,
                           VegetableName = VN.VegetableName,
-                          QuantityOfVegetable = obj.QuantityOfVegetable
+                          QuantityOfVegetable = obj.Quantity
 
                       }).ToList();
             return qs;
@@ -178,7 +178,7 @@ namespace Inventory_Mangement_System.Repository
                           select obj).SingleOrDefault();
                 
                 var pd = (from obj in context.ProductionDetails
-                          where obj.ProductID == productionID
+                          where obj.ProductionID == productionID
                           select obj).SingleOrDefault();
 
                 if (pd.SubAreaID == qs.subAreaDetails.Id)
@@ -188,9 +188,9 @@ namespace Inventory_Mangement_System.Repository
                     pd.SubAreaID = qs.subAreaDetails.Id;
                     pd.VegetableID = (from obj in vg
                                       select obj.VegetableID).SingleOrDefault();
-                    pd.QuantityOfVegetable = qs.Quantity;
+                    pd.Quantity = qs.Quantity;
                     pd.DateTime = DateTime.Now;
-                    pd.UserLoginID = mac.LoginID;
+                    pd.LoginID = mac.LoginID;
                     pd.Remark = qs.Remark;
 
 
@@ -219,9 +219,9 @@ namespace Inventory_Mangement_System.Repository
                         pd.SubAreaID = qs.subAreaDetails.Id;
                         pd.VegetableID = (from obj in vg
                                           select obj.VegetableID).SingleOrDefault();
-                        pd.QuantityOfVegetable = qs.Quantity;
+                        pd.Quantity = qs.Quantity;
                         pd.DateTime = DateTime.Now;
-                        pd.UserLoginID = mac.LoginID;
+                        pd.LoginID = mac.LoginID;
                         pd.Remark = qs.Remark;
 
 
