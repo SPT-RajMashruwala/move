@@ -41,6 +41,7 @@ namespace Agriculture.Controllers.ProductDetail
         [Route("Category/viewSerach/{keyword}")]
         public IActionResult ViewSearch(string keyword)
         {
+            /*or dbo.Categories.DateTime Like '%{keyword}%'*/
 
             string query = @$"
                             
@@ -50,7 +51,7 @@ namespace Agriculture.Controllers.ProductDetail
                             where CategoryID Like '%{keyword}%'
                             or dbo.Categories.CategoryName Like '%{keyword}%'
                             or dbo.Categories.Description Like '%{keyword}%'
-                            or dbo.Categories.DateTime Like '%{keyword}%'
+                           
                             or dbo.LoginDetails.UserName Like '%{keyword}%'
 
                             ";

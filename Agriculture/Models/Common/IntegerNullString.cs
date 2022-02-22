@@ -10,7 +10,7 @@ namespace Agriculture.Models.Common
     {
 
         public int Id { get; set; }
-        [Required(ErrorMessage ="Text Field is Require")]
+       /* [Required(ErrorMessage ="Text Field is Require")]*/
         public string Text { get; set; }
     }
 }

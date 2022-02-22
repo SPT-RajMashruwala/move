@@ -48,6 +48,7 @@ namespace Agriculture.Core.ProductDetail
                            TotalProductQuantity = 0,
                            LoginID = MacAddress.LoginID,
                            DateTime = DateTime.Now,
+                           
                        }).ToList();
             foreach (var item in pro)
             {
@@ -176,23 +177,25 @@ namespace Agriculture.Core.ProductDetail
                     Productlist = new List<ProductListClass>()
                 };
 
-                
-                for (int i=0; i<table.Rows.Count;i++) 
+
+                for (int i = 0; i < table.Rows.Count; i++)
                 {
                     DataRow dr = table.Rows[i];
-                
-                    product.Productlist.Add(new ProductListClass 
+
+                    product.Productlist.Add(new ProductListClass
                     {
-                      
+                        productDetail = new IntegerNullString() { Id = Int16.Parse(dr["ProductID"].ToString()), Text = dr["ProductName"].ToString() },
                         categorytype = new IntegerNullString() { Id = Int16.Parse(dr["CategoryID"].ToString()), Text = dr["CategoryName"].ToString() },
                         Description = dr["Description"].ToString(),
                         Type = new IntegerNullString() { Id = Int16.Parse(dr["UnitID"].ToString()), Text = dr["Type"].ToString() },
                         Variety = dr["Variety"].ToString(),
-                        Company= dr["Company"].ToString(),
-                        
+                        Company = dr["Company"].ToString(),
+
                     });
-                    product.LoginDetail.Text= dr["UserName"].ToString();
+                    product.LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() };
                 }
+
+
 
                 var result = new Result()
                 {
@@ -230,6 +233,7 @@ namespace Agriculture.Core.ProductDetail
                         Variety = x.Variety,
 
                     });
+                    product.LoginDetail = new IntegerNullString() { Id = x.LoginDetail_LoginID.LoginID, Text = x.LoginDetail_LoginID.UserName };
                 }
 
                 var result = new Result()
@@ -267,13 +271,20 @@ namespace Agriculture.Core.ProductDetail
                         throw new Exception("Product Alredy Exits.");
                     }
                 }
+                else
+                {
+                    if (pn.ProductName == dbobj.productDetail.Text) 
+                    {
+                        throw new Exception("Entered ProductName Updated SuccessFully");
+                    }
 
-                pn.ProductName = dbobj.productDetail.Text;
-                pn.Variety = dbobj.Variety;
-                pn.Company = dbobj.Company;
-                pn.CategoryID = dbobj.categorytype.Id;
-                pn.UnitID = dbobj.Type.Id;
-                pn.Description = dbobj.Description;
+                    pn.ProductName = dbobj.productDetail.Text;
+                    pn.Variety = dbobj.Variety;
+                    pn.Company = dbobj.Company;
+                    pn.CategoryID = dbobj.categorytype.Id;
+                    pn.UnitID = dbobj.Type.Id;
+                    pn.Description = dbobj.Description;
+                }
 
                 context.SubmitChanges();
                 return new Result()

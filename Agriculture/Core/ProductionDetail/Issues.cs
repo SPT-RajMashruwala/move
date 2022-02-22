@@ -21,24 +21,26 @@ namespace Agriculture.Core.ProductionDetails
                 Issue i = new Issue();
                 MAC login = new MAC();
                 var MacAddress = login.GetMacAddress().Result;
+                var db = (from obj in value.issueDetails
+                          select obj).SingleOrDefault();
                 var LoginID = context.LoginDetails.FirstOrDefault(c => c.SystemMac == MacAddress);
                 var qs = (from obj in value.issueDetails
                           select new Issue()
                           {
 
                               ProductID = obj.Product.Id,
-                              MainAreaID = value.MainArea.Id,
-                              SubAreaID = value.SubArea.Id,
+                              MainAreaID = db.MainArea.Id,
+                              SubAreaID = db.SubArea.Id,
                               Remark = obj.Remark,
                               LoginID = LoginID.LoginID,
                               DateTime = DateTime.Now,
                               PurchaseQuantity = obj.IssueQuantity,
-                              IssueDate = value.Date.ToLocalTime(),
+                              IssueDate = db.Date.ToLocalTime()
 
 
                           }).ToList();
                 var mainArea = (from obj in context.MainAreas
-                                where obj.MainAreaID == value.MainArea.Id
+                                where obj.MainAreaID == db.MainArea.Id
                                 select obj.MainAreaName).SingleOrDefault();
                 foreach (var item in qs)
                 {
@@ -93,14 +95,17 @@ namespace Agriculture.Core.ProductionDetails
                 {
                     issue.issueDetails.Add(new Models.ProductionDetail.IssueDetail()
                     {
+
                         IssueQuantity = (float)x.PurchaseQuantity,
                         Product = new IntegerNullString() { Id = x.Product.ProductID, Text = x.Product.ProductName },
                         Remark = x.Remark,
-                    });
-                    issue.Date = Convert.ToDateTime(x.IssueDate);
-                    issue.MainArea = new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName };
-                    issue.SubArea = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName };
-                    issue.DateTime = Convert.ToDateTime(x.DateTime);
+                        MainArea= new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName },
+                        SubArea = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName },
+                        Date = Convert.ToDateTime(x.IssueDate),
+                        LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName },
+                        DateTime = Convert.ToDateTime(x.DateTime)
+                });
+                    
                 }
 
                 return new Result()
@@ -128,11 +133,13 @@ namespace Agriculture.Core.ProductionDetails
                         IssueQuantity = (float)x.PurchaseQuantity,
                         Product = new IntegerNullString() { Id = x.Product.ProductID, Text = x.Product.ProductName },
                         Remark = x.Remark,
+                        MainArea= new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName },
+                        SubArea= new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName },
+                        Date = Convert.ToDateTime(x.IssueDate),
+                        LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName },
+                        DateTime = Convert.ToDateTime(x.DateTime)
                     });
-                    issue.Date = Convert.ToDateTime(x.IssueDate);
-                    issue.MainArea = new IntegerNullString() { Id = x.MainArea.MainAreaID, Text = x.MainArea.MainAreaName };
-                    issue.SubArea = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName };
-                    issue.DateTime = Convert.ToDateTime(x.DateTime);
+                
                 }
 
                 return new Result()
@@ -159,12 +166,16 @@ namespace Agriculture.Core.ProductionDetails
                         IssueQuantity = float.Parse(dr["PurchaseQuantity"].ToString()),
                         Product = new IntegerNullString() { Id = Int16.Parse(dr["ProductID"].ToString()), Text = dr["ProductName"].ToString() },
                         Remark = dr["Remark"].ToString(),
+                        MainArea= new IntegerNullString() { Id = Int16.Parse(dr["MainAreaID"].ToString()), Text = dr["MainAreaName"].ToString() },
+                        SubArea = new IntegerNullString() { Id = Int16.Parse(dr["SubAreaID"].ToString()), Text = dr["SubAreaName"].ToString() },
+                        Date = Convert.ToDateTime(dr["IssueDate"].ToString()),
+                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
+                        LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() }
+
+
+
                     });
-                    issue.Date = Convert.ToDateTime(dr["IssueDate"].ToString());
-                    issue.MainArea = new IntegerNullString() { Id = Int16.Parse(dr["MainAreaID"].ToString()), Text = dr["MainAreaName"].ToString() };
-                    issue.SubArea = new IntegerNullString() { Id = Int16.Parse(dr["SubAreaID"].ToString()), Text = dr["SubAreaName"].ToString() };
-                    issue.DateTime = Convert.ToDateTime(dr["DateTime"].ToString());
-                    issue.LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() };
+                
 
 
                 }
@@ -191,6 +202,8 @@ namespace Agriculture.Core.ProductionDetails
             {
                 MAC mac = new MAC();
                 var macObj = mac.GetMacAddress().Result;
+                var list = (from obj in value.issueDetails
+                          select obj).SingleOrDefault();
                 var MacAddress = context.LoginDetails.FirstOrDefault(c => c.SystemMac == macObj);
                 var qs = (
                          from obj in context.Issues
@@ -205,14 +218,14 @@ namespace Agriculture.Core.ProductionDetails
                           where obj.ProductID == p.Product.Id
                           select obj).SingleOrDefault();
                 var pid = (from obj in context.Issues
-                           where obj.SubAreaID == value.SubArea.Id
+                           where obj.SubAreaID == list.SubArea.Id
                            select new
                            {
                                ProductID = obj.ProductID
                            }).ToList();
 
 
-                if (qs.SubAreaID == value.SubArea.Id)
+                if (qs.SubAreaID == list.SubArea.Id)
                 {
                     if (qs.ProductID == p.Product.Id)
                     {
@@ -220,8 +233,8 @@ namespace Agriculture.Core.ProductionDetails
                         RemainQuantity = (float)temp - p.IssueQuantity;
                         qs.DateTime = DateTime.Now;
                         qs.ProductID = p.Product.Id;
-                        qs.MainAreaID = value.MainArea.Id;
-                        qs.SubAreaID = value.SubArea.Id;
+                        qs.MainAreaID = list.MainArea.Id;
+                        qs.SubAreaID =list.SubArea.Id;
                         qs.LoginID = MacAddress.LoginID;
                         qs.Remark = p.Remark;
                         qs.PurchaseQuantity = p.IssueQuantity;
@@ -242,7 +255,7 @@ namespace Agriculture.Core.ProductionDetails
                             if (p.Product.Id == item.ProductID)
                             {
                                 throw new Exception($"Entered Product : {item.ProductID} already issued for given sub" +
-                                    $" area : {value.SubArea.Text}");
+                                    $" area : {list.SubArea.Text}");
 
                             }
 
@@ -254,8 +267,8 @@ namespace Agriculture.Core.ProductionDetails
                         var temp = pd.TotalProductQuantity + qs.PurchaseQuantity;
                         qs.DateTime = DateTime.Now;
                         qs.ProductID = p.Product.Id;
-                        qs.MainAreaID = value.MainArea.Id;
-                        qs.SubAreaID = value.SubArea.Id;
+                        qs.MainAreaID = list.MainArea.Id;
+                        qs.SubAreaID = list.SubArea.Id;
                         qs.LoginID = MacAddress.LoginID;
                         qs.Remark = p.Remark;
                         qs.PurchaseQuantity = p.IssueQuantity;
@@ -281,7 +294,7 @@ namespace Agriculture.Core.ProductionDetails
                         if (p.Product.Id == item.ProductID)
                         {
                             throw new Exception($"Entered Product : {item.ProductID} already issued for given sub" +
-                                $" area : {value.SubArea.Text}");
+                                $" area : {list.SubArea.Text}");
 
                         }
 
@@ -293,8 +306,8 @@ namespace Agriculture.Core.ProductionDetails
                     pd.TotalProductQuantity = temp;
                     qs.DateTime = DateTime.Now;
                     qs.ProductID = p.Product.Id;
-                    qs.MainAreaID = value.MainArea.Id;
-                    qs.SubAreaID = value.SubArea.Id;
+                    qs.MainAreaID = list.MainArea.Id;
+                    qs.SubAreaID = list.SubArea.Id;
                     qs.LoginID = MacAddress.LoginID;
                     qs.Remark = p.Remark;
                     qs.PurchaseQuantity = p.IssueQuantity;

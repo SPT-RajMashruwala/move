@@ -53,7 +53,8 @@ namespace Agriculture.Controllers.ProductionDetail
         [HttpGet]
         [Route("Area/viewSearch/{keyword}")]
         public IActionResult viewSearch(string keyword)
-        {
+        {/*
+            or dbo.SubArea.DateTime Like '%{keyword}%'*/
             string query = @$"
                             
                             select * from dbo.SubArea
@@ -64,7 +65,7 @@ namespace Agriculture.Controllers.ProductionDetail
                             where dbo.SubArea.SubAreaID Like '%{keyword}%'
                             or dbo.SubArea.SubAreaName Like '%{keyword}%'
                             or dbo.SubArea.Remark Like '%{keyword}%'
-                            or dbo.SubArea.DateTime Like '%{keyword}%'
+                            
                             or dbo.MainArea.MainAreaName Like '%{keyword}%'
                             or dbo.LoginDetails.UserName Like '%{keyword}%'
                           

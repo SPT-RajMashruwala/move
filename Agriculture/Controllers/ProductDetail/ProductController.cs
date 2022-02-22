@@ -55,7 +55,7 @@ namespace Agriculture.Controllers.ProductDetail
         [Route("Product/viewSearch/{keyword}")]
         public IActionResult ViewSearch(string keyword)
         {
-         
+            /*or dBO.Products.DateTime Like '%{keyword}%'*/
             string query = @$"
                             
                            select * from dbo.Products 
@@ -71,10 +71,10 @@ namespace Agriculture.Controllers.ProductDetail
                            or DBO.Categories.CategoryName Like '%{keyword}%' 
                            or DBO.ProductUnits.Type Like '%{keyword}%'
                            or DBO.LoginDetails.UserName Like '%{keyword}%'
-                           
+                           or ProductID Like '%{keyword}%'
                            or dBO.Products.Description Like '%{keyword}%'
                            or TotalProductQuantity Like '%{keyword}%' 
-                           or dBO.Products.DateTime Like '%{keyword}%' 
+                           
 
                             ";
 

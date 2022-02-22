@@ -115,10 +115,10 @@ namespace Agriculture.Core.ProductionDetails
                         Remark=x.Remark,
                         subAreaDetails= new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName },
                         vegetable = new IntegerNullString() { Id = x.Vegetable.VegetableID, Text = x.Vegetable.VegetableName },
-
+                        DateTime = Convert.ToDateTime(x.DateTime),
+                        LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName }
                     });
-                    production.DateTime =Convert.ToDateTime(x.DateTime);
-                    production.LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName };
+                   
                 }
 
                 
@@ -149,11 +149,10 @@ namespace Agriculture.Core.ProductionDetails
                         Remark = dr["Remark"].ToString(),
                         subAreaDetails = new IntegerNullString() { Id = Int16.Parse(dr["SubAreaID"].ToString()), Text = dr["SubAreaName"].ToString() },
                         vegetable = new IntegerNullString() { Id = Int16.Parse(dr["VegetableID"].ToString()), Text = dr["VegetableName"].ToString() },
-
+                        DateTime = Convert.ToDateTime(dr["DateTime"].ToString()),
+                        LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() }
                     });
-                    production.DateTime = Convert.ToDateTime(dr["DateTime"].ToString());
-                    production.LoginDetail = new IntegerNullString() { Id = Int16.Parse(dr["LoginID"].ToString()), Text = dr["UserName"].ToString() };
-
+                   
                 }
                 var result = new Result()
                 {
@@ -184,10 +183,10 @@ namespace Agriculture.Core.ProductionDetails
                         Remark = x.Remark,
                         subAreaDetails = new IntegerNullString() { Id = x.SubArea.SubAreaID, Text = x.SubArea.SubAreaName },
                         vegetable = new IntegerNullString() { Id = x.Vegetable.VegetableID, Text = x.Vegetable.VegetableName },
-
+                        DateTime = Convert.ToDateTime(x.DateTime),
+                        LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName }
                     });
-                    production.DateTime = Convert.ToDateTime(x.DateTime);
-                    production.LoginDetail = new IntegerNullString() { Id = x.LoginDetail.LoginID, Text = x.LoginDetail.UserName };
+                    
                 }
 
 
@@ -285,9 +284,6 @@ namespace Agriculture.Core.ProductionDetails
                         pd.DateTime = DateTime.Now;
                         pd.LoginID = mac.LoginID;
                         pd.Remark = qs.Remark;
-
-
-
                         context.SubmitChanges();
                         return new Result()
                         {

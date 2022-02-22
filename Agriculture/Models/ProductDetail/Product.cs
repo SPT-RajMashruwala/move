@@ -13,8 +13,8 @@ namespace Agriculture.Models.ProductDetail
     }
     public class ProductListClass
     {
-        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Please Enter Character or Letter.")]
-        [Required(ErrorMessage = "Product Name is Required")]
+        /*[RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Please Enter Character or Letter.")]
+        [Required(ErrorMessage = "Product Name is Required")]*/
         public Models.Common.IntegerNullString productDetail { get; set; } = new Common.IntegerNullString();
         public string Variety { get; set; }
 

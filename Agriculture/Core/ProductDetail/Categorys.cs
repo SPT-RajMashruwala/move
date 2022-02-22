@@ -27,7 +27,7 @@ namespace Agriculture.Core.ProductDetail
             }
             else
             {
-                category.CategoryName = value.categoryType.Text;
+                category.CategoryName = char.ToUpper(value.categoryType.Text[0]) + value.categoryType.Text.Substring(1).ToLower();
                 category.Description = value.Description;
                 category.LoginID = MacAddress.LoginID;
                 category.DateTime = value.DateTime;
@@ -162,9 +162,12 @@ namespace Agriculture.Core.ProductDetail
 
                     }
                 }
+               
+                    ck.Description = value.Description;
+                
 
                 ck.CategoryName = value.categoryType.Text;
-                ck.Description = value.Description;
+                
                 ck.LoginID = MacAddress.LoginID;
                 ck.DateTime = value.DateTime;
                

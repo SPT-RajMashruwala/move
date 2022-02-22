@@ -8,7 +8,6 @@ namespace Agriculture.Models.ProductDetail
 {
     public class Purchase
     {
-        public int PurchaseID { get; set; }
         public List<PurchaseList> purchaseList { get; set; } = new List<PurchaseList>();
     }
 
@@ -16,6 +15,7 @@ namespace Agriculture.Models.ProductDetail
     {
         [Required(ErrorMessage = "Date Is Required.")]
         public DateTime Purchasedate { get; set; }
+        public int PurchaseID { get; set; }
 
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Please Enter Only Letter.")]
         [Required(ErrorMessage = "Total Quantity Required.")]

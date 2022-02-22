@@ -128,9 +128,10 @@ namespace Agriculture.Core.ProductDetail
                         
 
 
+                        PurchaseID = Int16.Parse(dr["PurchaseID"].ToString()),
                         productname = new IntegerNullString(){ Id=Int16.Parse(dr["ProductID"].ToString()),Text=dr["ProductName"].ToString()},
                         totalquantity = float.Parse(dr["TotalQuantity"].ToString()),
-                        totalcost = float.Parse(dr["TotalQuantity"].ToString()),
+                        totalcost = float.Parse(dr["TotalCost"].ToString()),
                         vendorname = dr["VendorName"].ToString(),
                         Purchasedate = Convert.ToDateTime(dr["PurchaseDate"].ToString()),
                         remarks = dr["Remark"].ToString(),
@@ -140,7 +141,6 @@ namespace Agriculture.Core.ProductDetail
 
 
                     });
-                    purchase.PurchaseID = Int16.Parse(dr["PurchaseID"].ToString());
 
                 }
 

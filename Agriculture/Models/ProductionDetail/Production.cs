@@ -9,13 +9,13 @@ namespace Agriculture.Models.ProductionDetail
     public class Production
     {
         public List<ProductionList> ProductionLists { get; set; } = new List<ProductionList>();
-        public Models.Common.IntegerNullString LoginDetail { get; set; } = new Common.IntegerNullString();
-        public DateTime DateTime { get; set; }
     }
     public class ProductionList
     {
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please Enter Only Character.")]
-        [Required(ErrorMessage = "Vegetable Name Required.")]
+  /*      [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Please Enter Only Character.")]
+        [Required(ErrorMessage = "Vegetable Name Required.")]*/
+        public Models.Common.IntegerNullString LoginDetail { get; set; } = new Common.IntegerNullString();
+        public DateTime DateTime { get; set; }
         public Models.Common.IntegerNullString vegetable { get; set; } = new Common.IntegerNullString();
 
         [RegularExpression(@"^[0-9]+$", ErrorMessage = "Please Enter Only Letter.")]

@@ -27,7 +27,7 @@ namespace Agriculture.Core.ProductionDetails
                            from y in context.MainAreas
                            where m.mainArea.Text == y.MainAreaName
                            select new
-                           {
+                           { 
                                MainAreaID = y.MainAreaID,
                                MainAreaname = y.MainAreaName
                            }).ToList();
