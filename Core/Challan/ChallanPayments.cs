@@ -30,6 +30,7 @@ namespace KarKhanaBook.Core.Challan
                     dbpaymentSlip.BillSerialNumber = value.BillSerialNumber;
                     dbpaymentSlip.TotalWeight = TotalWeight;
                     dbpaymentSlip.Payment = value.Payment;
+                    dbpaymentSlip.DateTime = DateTime.Now;
 
                     context.PaymentSlips.InsertOnSubmit(dbpaymentSlip);
                     context.SubmitChanges();
@@ -39,7 +40,8 @@ namespace KarKhanaBook.Core.Challan
                         Message = "PaymentSlip Added Successfully",
                         Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.success.ToString()
                       , true))).ToString(),
-                        StatusCode = (int)HttpStatusCode.OK
+                        StatusCode = (int)HttpStatusCode.OK,
+                   
 
                     };
                     return result;
@@ -48,7 +50,7 @@ namespace KarKhanaBook.Core.Challan
                 {
                     var result = new Result()
                     {
-                        Message = "Your Entered ChallanSlipNumber Not Match",
+                        Message = "Your Entered ChallanSlipSerialNumber Not Match",
                         Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.info.ToString()
                          , true))).ToString(),
                         StatusCode = (int)HttpStatusCode.NotFound
@@ -58,16 +60,31 @@ namespace KarKhanaBook.Core.Challan
                 }
             }
         }
-        public async Task<IEnumerable> View()
+        public Result View()
         {
             using (KarkhanaBookDataContext context = new KarkhanaBookDataContext())
             {
-                var dbobj = (from obj in context.PaymentSlips
-                             select obj).ToList();
-                return dbobj;
+                return new Result()
+                {
+                    Message = "Your Entered ChallanSlipSerialNumber Not Match",
+                    Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.info.ToString()
+                         , true))).ToString(),
+                    StatusCode = (int)HttpStatusCode.NotFound,
+                    Data=(from obj in context.PaymentSlips
+                             select new Model.Challan.ChallanPayment()
+                             {
+                                 PaymentSlipIndex=obj.PaymentSlipIndex,
+                                 ChallanSlipSerialNumber=obj.ChallanSlipSerialNumber,
+                                 BillSerialNumber=obj.BillSerialNumber,
+                                 TotalWeight=(float)obj.TotalWeight,
+                                 Payment=(float)obj.Payment,
+
+
+                             }).ToList(),
+                };
             }
         }
-        public async Task<IEnumerable> ViewByID(int ID)
+        public Result ViewByID(int ID)
         {
             using (KarkhanaBookDataContext context = new KarkhanaBookDataContext())
             {
@@ -76,7 +93,25 @@ namespace KarKhanaBook.Core.Challan
                              select obj).ToList();
                 if (dbobj.Count > 0)
                 {
-                    return dbobj;
+                    return new Result()
+                    {
+                        Message = "Your Entered ChallanSlipSerialNumber Not Match",
+                        Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.info.ToString()
+                        , true))).ToString(),
+                        StatusCode = (int)HttpStatusCode.NotFound,
+                        Data = (from obj in context.PaymentSlips
+                                where obj.PaymentSlipIndex == ID
+                                select new Model.Challan.ChallanPayment()
+                                {
+                                    PaymentSlipIndex = obj.PaymentSlipIndex,
+                                    ChallanSlipSerialNumber = obj.ChallanSlipSerialNumber,
+                                    BillSerialNumber = obj.BillSerialNumber,
+                                    TotalWeight = (float)obj.TotalWeight,
+                                    Payment = (float)obj.Payment,
+
+
+                                }).ToList(),
+                    };
                 }
                 else
                 {
@@ -106,12 +141,24 @@ namespace KarKhanaBook.Core.Challan
                     dbobj.Payment = value.Payment;
 
                     context.SubmitChanges();
+
                     var result = new Result()
                     {
                         Message = "PaymentSlip Updated Successfully",
                         Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.success.ToString()
                         , true))).ToString(),
-                        StatusCode = (int)HttpStatusCode.OK
+                        StatusCode = (int)HttpStatusCode.OK,
+                        Data = new Model.Challan.ChallanPayment()
+                        {
+                            PaymentSlipIndex = ID,
+                            ChallanSlipSerialNumber = value.ChallanSlipSerialNumber,
+                            BillSerialNumber = value.BillSerialNumber,
+                            TotalWeight = (float)value.TotalWeight,
+                            Payment = (float)value.Payment,
+
+
+                        },
+
 
                     };
                     return result;

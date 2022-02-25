@@ -21,7 +21,7 @@ namespace KarKhanaBook.Controllers.Challan
         [Route("ChallanPayment/View")]
         public IActionResult View()
         {
-            return Ok(new ChallanPayments().View().Result);
+            return Ok(new ChallanPayments().View());
 
         }
 
@@ -30,7 +30,7 @@ namespace KarKhanaBook.Controllers.Challan
         [Route("ChallanPayment/ViewById/{ID}")]
         public IActionResult ViewByID([FromRoute] int ID)
         {
-            return Ok(new ChallanPayments().ViewByID(ID).Result);
+            return Ok(new ChallanPayments().ViewByID(ID));
 
         }
 

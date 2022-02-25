@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace KarKhanaBook.Model.Challan
 {
     public class ChallanSlip
     {
+        [JsonIgnore]
+        public int ChallanSlipIndex { get; set; }
         public string SellerName { get; set; }
         [Required(ErrorMessage = "ChallanSlip Serial Number Required ! ")]
         public string ChallanSlipSerialNumber { get; set; }

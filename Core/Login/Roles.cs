@@ -38,7 +38,8 @@ namespace KarKhanaBook.Core.Login
             using (KarkhanaBookDataContext context = new KarkhanaBookDataContext())
             {
                 var dbobj = (from obj in context.Roles
-                             select obj).ToList();
+                             select new {obj.RoleID,obj.RoleName}
+                             ).ToList();
                 return dbobj;
             }
 
@@ -49,7 +50,7 @@ namespace KarKhanaBook.Core.Login
             {
                 var dbobj = (from obj in context.Roles
                              where obj.RoleID == ID
-                             select obj).ToList();
+                             select new { obj.RoleID,obj.RoleName}).ToList();
                 return dbobj;
             }
 

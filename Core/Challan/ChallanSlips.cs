@@ -44,23 +44,63 @@ namespace KarKhanaBook.Core.Challan
 
             }
         }
-        public async Task<IEnumerable> View()
+        public Result View()
         {
             using (KarkhanaBookDataContext context = new KarkhanaBookDataContext())
             {
-                var dbobj = (from obj in context.ChallanSlips
-                             select obj).ToList();
-                return dbobj;
+                return new Result()
+                {
+                    Message = "ChallanSlip View Successfully",
+                    Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.success.ToString()
+                    , true))).ToString(),
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Data=(from obj in context.ChallanSlips
+                         select new Model.Challan.ChallanSlip() 
+                         {
+                             ChallanSlipIndex=obj.ChallanSlipIndex,
+                             ChallanSlipSerialNumber=obj.ChallanSlipSerialNumber,
+                             SellerName=obj.SellerName,
+                             RangeCartoonSerialNumber=obj.RangeCartoonSerialNumber,
+                             TotalCartoons=   (int)obj.TotalCartoons,
+                             RsPerKG=(float)obj.RsPerKG,
+                             TotalWeight=(float)obj.TotalWeight,
+                             DateOfPurchase=Convert.ToDateTime(obj.DateOfPurchase),
+                             Remark=obj.Remark,
+                             
+                             
+                         }).ToList(),
+                    
+                };
             }
         }
-        public async Task<IEnumerable> ViewByID(int ID)
+        public Result ViewByID(int ID)
         {
             using (KarkhanaBookDataContext context = new KarkhanaBookDataContext())
             {
-                var dbobj = (from obj in context.ChallanSlips
-                             where obj.ChallanSlipIndex == ID
-                             select obj).ToList();
-                return dbobj;
+                return new Result()
+                {
+                    Message = "ChallanSlip View Successfully",
+                    Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.success.ToString()
+                    , true))).ToString(),
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Data = (from obj in context.ChallanSlips
+                            where obj.ChallanSlipIndex==ID
+                            select new Model.Challan.ChallanSlip()
+                            {
+                                ChallanSlipIndex = obj.ChallanSlipIndex,
+                                ChallanSlipSerialNumber = obj.ChallanSlipSerialNumber,
+                                SellerName = obj.SellerName,
+                                RangeCartoonSerialNumber = obj.RangeCartoonSerialNumber,
+                                TotalCartoons = (int)obj.TotalCartoons,
+                                RsPerKG = (float)obj.RsPerKG,
+                                TotalWeight = (float)obj.TotalWeight,
+                                DateOfPurchase = Convert.ToDateTime(obj.DateOfPurchase),
+                                Remark = obj.Remark,
+
+
+                            }).ToList(),
+
+                };
             }
         }
         public Result Update(Model.Challan.ChallanSlip value, int ID)
@@ -70,6 +110,7 @@ namespace KarKhanaBook.Core.Challan
                 var dbobj = (from obj in context.ChallanSlips
                              where obj.ChallanSlipIndex == ID
                              select obj).SingleOrDefault();
+                dbobj.ChallanSlipSerialNumber = value.ChallanSlipSerialNumber;
                 dbobj.SellerName = value.SellerName;
                 dbobj.RangeCartoonSerialNumber = value.RangeCartoonSerialNumber;
                 dbobj.TotalCartoons = value.TotalCartoons;
@@ -85,7 +126,8 @@ namespace KarKhanaBook.Core.Challan
                     Message = "ChallanSlip Updated Successfully",
                     Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.success.ToString()
                      , true))).ToString(),
-                    StatusCode = (int)HttpStatusCode.OK
+                    StatusCode = (int)HttpStatusCode.OK,
+                    Data = dbobj,
 
                 };
                 return result;

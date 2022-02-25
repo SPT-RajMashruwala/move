@@ -13,7 +13,7 @@ namespace KarKhanaBook.Middleware
     public class CustomeException
     {
         private readonly RequestDelegate _next;
-
+       
         public CustomeException(RequestDelegate next)
         {
             _next = next;
@@ -22,6 +22,7 @@ namespace KarKhanaBook.Middleware
         public async Task Invoke(HttpContext context)
         {
             Result result = new Result();
+            var hasError = false;
 
             try
             {
@@ -30,7 +31,7 @@ namespace KarKhanaBook.Middleware
 
             catch (ArgumentException e)
             {
-
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -44,6 +45,8 @@ namespace KarKhanaBook.Middleware
             }
             catch (MethodAccessException e)
             {
+
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.NotModified;
@@ -57,6 +60,8 @@ namespace KarKhanaBook.Middleware
             }
             catch (UnauthorizedAccessException e)
             {
+
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -70,6 +75,8 @@ namespace KarKhanaBook.Middleware
             }
             catch (Exception e)
             {
+
+                hasError = true;
                 var response = context.Response;
                 response.ContentType = "application/json";
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
@@ -83,10 +90,7 @@ namespace KarKhanaBook.Middleware
             }
             finally
             {
-                if (result.Message == null)
-                {
-                }
-                else
+                if (hasError == true)
                 {
                     var errorJson = JsonConvert.SerializeObject(result);
                     await context.Response.WriteAsync(errorJson);

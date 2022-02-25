@@ -1,6 +1,8 @@
 ﻿using KarKhanaBook.Core.Login;
 using KarKhanaBook.Model.Login;
+using KarKhanaBook.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace KarKhanaBook.Controllers.Login
 {
@@ -8,11 +10,21 @@ namespace KarKhanaBook.Controllers.Login
     [ApiController]
     public class UserController : ControllerBase
     {
+        private readonly Users _users;
+        private readonly IConfiguration _configuration;
+        private readonly Token _token;
+        public UserController(Core.Login.Users user,IConfiguration configuration,Token token)
+        {
+            _users = user;
+            _configuration = configuration;
+            _token = token;
+        }
+
         [HttpPost]
         [Route("User/SignUP")]
         public IActionResult SingUP([FromBody]User userModel)
         {
-            return Ok(new Users().SignUP(userModel));
+            return Ok(_users.SignUP(userModel));
         }
 
 
@@ -20,7 +32,7 @@ namespace KarKhanaBook.Controllers.Login
         [Route("User/SignIN")]
         public IActionResult SignIN([FromBody]Model.Login.SingIN signINModel)
         {
-            return Ok(new Users().SignIN(signINModel));
+            return Ok(_users.SignIN(signINModel));
         }
 
 
@@ -29,7 +41,7 @@ namespace KarKhanaBook.Controllers.Login
         public IActionResult UpdateAccount([FromBody]User userModel, [FromRoute] int ID)
         {
 
-            return Ok(new Users().UpdateAccount(userModel, ID));
+            return Ok(_users.UpdateAccount(userModel, ID));
         }
 
 
@@ -38,7 +50,7 @@ namespace KarKhanaBook.Controllers.Login
         public IActionResult DeleteAccount([FromRoute]int ID)
         {
 
-            return Ok(new Users().DeleteAccount(ID));
+            return Ok(_users.DeleteAccount(ID));
         }
     }
 }

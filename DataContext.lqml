@@ -1,86 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Database Name="KarkhanaBook" EntityNamespace="KarkhanaBookContext" ContextNamespace="KarkhanaBookContext" Class="KarkhanaBookDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="0bdf586b-02df-430f-999e-aa693e42543e" Provider="Devart.Data.SqlServer.Linq.Provider.SqlDataProvider, Devart.Data.SqlServer.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
-  <Connection Mode="ConnectionString" ConnectionString="Data Source=DESKTOP-PF2SA84;Initial Catalog=KarkhanaBook;Integrated Security=True;Persist Security Info=True" Provider="System.Data.SqlClient" />
+<Database Name="KarkhanaBook" EntityNamespace="KarkhanaBookContext" ContextNamespace="KarkhanaBookContext" Class="KarkhanaBookDataContext" xmlns:ed="http://devart.com/schemas/EntityDeveloper/1.0" ed:Guid="b4522f06-dab3-47f8-a75a-9be108291167" Provider="Devart.Data.SqlServer.Linq.Provider.SqlDataProvider, Devart.Data.SqlServer.Linq" Extended="true" xmlns="http://schemas.devart.com/linqconnect/mapping">
+  <Connection Mode="ConnectionString" ConnectionString="Data Source=DESKTOP-D9KFJSI;Initial Catalog=KarkhanaBook;Integrated Security=True;Persist Security Info=True" Provider="System.Data.SqlClient" />
   <Table Name="dbo.ChallanSlip" Member="ChallanSlips">
-    <Type Name="ChallanSlip" ed:Guid="821dc699-e92f-4f4d-ab1b-3b54cd022bcd">
-      <Column Name="ChallanSlipIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="85cb444c-456d-493b-8574-df4b99155474" />
-      <Column Name="ChallanSlipSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="a904401d-eb09-40eb-99c7-c6d8e20cea90" />
-      <Column Name="SellerName" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="10dac0df-5e97-4bcf-b2e8-05a899663f57" />
-      <Column Name="RangeCartoonSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="1d3809bd-d4e0-4037-aad8-699a6d76266e" />
-      <Column Name="TotalCartoons" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="711da874-4216-454f-a8e1-3731d509245e" />
-      <Column Name="RsPerKG" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="7ef49016-aa42-4f3c-8115-30679844abe8" />
-      <Column Name="TotalWeight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="e4bb39cf-266e-49ff-a829-c2cdc58d3b8a" />
-      <Column Name="DateOfPurchase" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="f6ccf460-2663-45ab-b5b2-255991eca867" />
-      <Column Name="Remark" Type="System.String" DbType="VARCHAR(150)" CanBeNull="true" UpdateCheck="Never" MaxLength="150" ed:ValidateMaxLength="150" ed:ValidateRequired="false" ed:Guid="313ce8eb-2fb6-43ac-8a1c-94f16f57e547" />
-      <Column Name="DateTime" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="0fe4779d-a4f5-411d-9110-577bf789742e" />
+    <Type Name="ChallanSlip" ed:Guid="a8d3e512-1912-4fa8-9092-01b722bdea09">
+      <Column Name="ChallanSlipIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="539914a2-f8b8-4cd1-b56e-2589f94004c4" />
+      <Column Name="ChallanSlipSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="58db6da0-a007-413c-8a3b-750219c7a143" />
+      <Column Name="SellerName" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="1dc750bd-39df-40f8-8295-46df5a8b8c26" />
+      <Column Name="RangeCartoonSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="65b83f4c-92c6-4a4b-a3fa-6e27f68636dc" />
+      <Column Name="TotalCartoons" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="ea1d693a-0dc4-4683-bbb5-8a5c4e27e72d" />
+      <Column Name="RsPerKG" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="f5e6e10f-6bef-4522-b47a-f089957c498e" />
+      <Column Name="TotalWeight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="0d6b681b-34bc-4433-b07c-79fa2ff59ffc" />
+      <Column Name="DateOfPurchase" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="2ad6f152-1f72-459f-9f56-cbb9fe543129" />
+      <Column Name="Remark" Type="System.String" DbType="VARCHAR(150)" CanBeNull="true" UpdateCheck="Never" MaxLength="150" ed:ValidateMaxLength="150" ed:ValidateRequired="false" ed:Guid="f457773e-a1a8-492d-a203-dc0401bc6dba" />
+      <Column Name="DateTime" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="0e4d0e94-b45a-4796-98c3-ca6259d3b7f7" />
     </Type>
   </Table>
   <Table Name="dbo.KarigerDailySheet" Member="KarigerDailySheets">
-    <Type Name="KarigerDailySheet" ed:Guid="e841d36d-5083-451f-a232-c80a9399d37e">
-      <Column Name="IndexNumber" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="b995dfa6-e93f-49c2-a663-7d84cbfb140e" />
-      <Column Name="UserName" Type="System.String" DbType="VARCHAR(150)" CanBeNull="true" UpdateCheck="Never" MaxLength="150" ed:ValidateMaxLength="150" ed:ValidateRequired="false" ed:Guid="ff2a1d92-bf2d-4c3f-9b8f-158482f24574" />
-      <Column Name="AVGOfMachine" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="2c35a747-2cde-4ce4-8b8a-faa1c4424a6a" />
-      <Column Name="MachineNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="5e5e86f5-2315-4e7f-b725-e69593d84d5d" />
-      <Column Name="Shift" Type="System.String" DbType="VARCHAR(30)" CanBeNull="true" UpdateCheck="Never" MaxLength="30" ed:ValidateMaxLength="30" ed:ValidateRequired="false" ed:Guid="5192d1a5-fed5-45cb-8287-948e371743e2" />
-      <Column Name="Date" Type="System.DateTime" DbType="DATE" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="b1ca7650-c1ee-491f-9b55-77e052f7c03e" />
+    <Type Name="KarigerDailySheet" ed:Guid="8233b2dc-f99a-4007-a2d5-4332fa5b1f58">
+      <Column Name="IndexNumber" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="6302e030-538b-40a3-8f6a-e259a5a2b228" />
+      <Column Name="UserName" Type="System.String" DbType="VARCHAR(150)" CanBeNull="true" UpdateCheck="Never" MaxLength="150" ed:ValidateMaxLength="150" ed:ValidateRequired="false" ed:Guid="5d1672a4-21ce-4a34-88cc-716810d86ea4" />
+      <Column Name="AVGOfMachine" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="e41db63e-1466-4351-8011-600c89c1330d" />
+      <Column Name="MachineNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="14b1c0e4-558e-430a-87e6-50273db75c68" />
+      <Column Name="Shift" Type="System.String" DbType="VARCHAR(30)" CanBeNull="true" UpdateCheck="Never" MaxLength="30" ed:ValidateMaxLength="30" ed:ValidateRequired="false" ed:Guid="28f91ccd-d859-487b-8ceb-395c89aee0e5" />
+      <Column Name="Date" Type="System.DateTime" DbType="DATE" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="3df3a076-b3e7-4055-ae73-69765898fcd3" />
     </Type>
   </Table>
   <Table Name="dbo.PaymentSlips" Member="PaymentSlips">
-    <Type Name="PaymentSlip" ed:Guid="da0c7783-5334-44f3-b044-410a059b590c">
-      <Column Name="PaymentSlipIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="85f4debd-e59c-4ef8-a787-68947e977d14" />
-      <Column Name="ChallanSlipSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="f9c72d55-b3ba-46fb-8cb1-442901eff4b4" />
-      <Column Name="BillSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="b7b68ced-8cc4-4279-a227-1a9a29e83aeb" />
-      <Column Name="TotalWeight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="88b285ee-a91a-4039-8eab-4cfcb9ddb041" />
-      <Column Name="Payment" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="f6b255a4-0563-46bd-9987-c72eeea8772d" />
+    <Type Name="PaymentSlip" ed:Guid="72f34956-9fa5-4b46-856b-07025cb86e7f">
+      <Column Name="PaymentSlipIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="14dc05f7-137d-4865-9442-7cb17560cf5f" />
+      <Column Name="ChallanSlipSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="5282546f-8b74-44cc-aeba-7c2a51259bb6" />
+      <Column Name="BillSerialNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="b5cdb6f4-634b-4860-b20d-ee8f9ba7ac42" />
+      <Column Name="TotalWeight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="45d75c7b-796e-4be9-8ea8-11560cf933a6" />
+      <Column Name="Payment" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="61653f29-717d-4d1d-b32c-2f909f4cfc17" />
+      <Column Name="DateTime" Type="System.DateTime" DbType="DATETIME" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="56c40e30-9c4f-47a9-bcd7-44bb0f737e0a" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RefreshToken" Member="RefreshTokens">
+    <Type Name="RefreshToken" ed:Guid="62ddce18-2eae-4c69-a176-10742c7cf748">
+      <Column Name="RefreshTokenID" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="ac828863-a325-4b9d-acda-648a72f1323e" />
+      <Column Name="RefreshToken" Member="RefreshToken1" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="c9b3058e-0f03-4dba-9cdf-6a25f542f6fe" />
+      <Association Name="RefreshToken_UserRefreshToken" ed:AssociationGuid="0e566ad5-f7b9-439c-be7f-8cc66828e155" Member="UserRefreshTokens" ed:Guid="948c7740-ff69-41a7-b229-d93797ae0705" ThisKey="RefreshTokenID" OtherKey="RefreshTokenID" Type="UserRefreshToken" />
     </Type>
   </Table>
   <Table Name="dbo.Roles" Member="Roles">
-    <Type Name="Role" ed:Guid="28739ddd-1d45-4cbe-89df-6ce682478496">
-      <Column Name="RoleID" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="04bd5c57-caaa-4d7f-93b2-17bb2cf5eeda" />
-      <Column Name="RoleName" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="f6fe1754-baca-4c32-9710-6953840fcf6c" />
-      <Association Name="Role_User" ed:AssociationGuid="c1f8c591-dff5-45b8-b723-1017cd85a5f5" Member="Users" ed:Guid="9561e6f8-29c6-4393-8f57-709f346589a1" ThisKey="RoleID" OtherKey="RoleID" Type="User" />
+    <Type Name="Role" ed:Guid="bb82e3bf-3afb-4aba-92e8-c5cf8a18a169">
+      <Column Name="RoleID" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="4e6d8234-2f72-476b-a297-0a6b5ea83a56" />
+      <Column Name="RoleName" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="ade04b27-722a-40a7-8801-d0e3b3bb660d" />
+      <Association Name="Role_User" ed:AssociationGuid="2ba4c8f5-6277-4c38-81ea-c047a9d18654" Member="Users" ed:Guid="ef178630-33fc-4338-aeb6-31ffeeec42ea" ThisKey="RoleID" OtherKey="RoleID" Type="User" />
     </Type>
   </Table>
   <Table Name="dbo.TakaChallan" Member="TakaChallans">
-    <Type Name="TakaChallan" ed:Guid="e59b5f2a-bb76-4046-abc8-3a54a688d7db">
-      <Column Name="TakaChallanIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="5931bee8-fd19-48a7-bc31-0d7154913002" />
-      <Column Name="TakaChallanNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="a474e2b5-14d2-4303-8a69-cfe00387fe9e" />
-      <Column Name="TotalTakaQuantity" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="531145d5-47f0-4f36-8604-31de929589cb" />
-      <Column Name="TotalMeter" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="f62f27e2-a854-4f00-b5cd-0ab3eb9eb672" />
-      <Column Name="TotalWeight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="5a971f9e-a0ce-4d48-b44c-74df7ec3595c" />
-      <Column Name="RsPerMeter" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="899290aa-e6d4-4e4e-b9f1-8157ba4b3063" />
-      <Column Name="TotalBillValue" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="771d198a-0738-4bec-ab32-9746afad850f" />
+    <Type Name="TakaChallan" ed:Guid="a02c9acd-b380-4950-93b9-bb5f66d43aa4">
+      <Column Name="TakaChallanIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="83b5d3d8-094e-42ca-9696-b990aadd35e5" />
+      <Column Name="TakaChallanNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="9f41284b-0aa4-4190-8162-d9d9f0b93d23" />
+      <Column Name="TotalTakaQuantity" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="9c8d387c-e88e-423b-a474-6cda5e11f7a4" />
+      <Column Name="TotalMeter" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="35efd839-bd89-4da3-bb51-4cc9148844c2" />
+      <Column Name="TotalWeight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="2a7ccae3-1b21-424e-a1a6-422307f03f71" />
+      <Column Name="RsPerMeter" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="a3d5028e-3487-4d6e-93d1-91b80f7b192e" />
+      <Column Name="TotalBillValue" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="ea87e475-7971-40ca-97a2-20e77ffef237" />
     </Type>
   </Table>
   <Table Name="dbo.TakaIssues" Member="TakaIssues">
-    <Type Name="TakaIssue" ed:Guid="941dcb20-1635-4fc1-b209-ffc1ff87d905">
-      <Column Name="TakaIssueIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="009b0cc1-15e4-4e5b-949f-eeea45aa00ad" />
-      <Column Name="TakaID" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="a60723d4-061e-452e-bfc2-977faa589b95" />
-      <Column Name="TakaChallanNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="4085d9c4-0310-4908-8ae3-10617109e506" />
-      <Column Name="SlotNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="ac409f9a-034d-4804-9c7d-bd90ad529f22" />
+    <Type Name="TakaIssue" ed:Guid="37108c93-7646-425c-ad87-773a31c8ff11">
+      <Column Name="TakaIssueIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="c15645f9-a553-48a6-b01b-67ab228686b3" />
+      <Column Name="TakaID" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="1e2b01b2-7875-4e5d-8b4f-92f96e670314" />
+      <Column Name="TakaChallanNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="993e6895-dc60-4266-ac3a-63d9cc3b20d4" />
+      <Column Name="SlotNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="22481d9a-baf4-46b7-b7e9-bac20c62c752" />
     </Type>
   </Table>
   <Table Name="dbo.TakaSheet" Member="TakaSheets">
-    <Type Name="TakaSheet" ed:Guid="b33ebc55-98c3-421b-be8c-315c16c9e37d">
-      <Column Name="TakaSheetIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="b0ef4176-8389-4dcd-8781-9945b9170b3b" />
-      <Column Name="TakaID" Type="System.Int32" DbType="INT NOT NULL" CanBeNull="false" UpdateCheck="Never" Precision="10" ed:ValidateRequired="true" ed:Guid="335267c3-9a37-45e1-97e4-98d1fb35ca9b" />
-      <Column Name="MachineNumber" Type="System.Int32" DbType="INT NOT NULL" CanBeNull="false" UpdateCheck="Never" Precision="10" ed:ValidateRequired="true" ed:Guid="42df7a51-6c2d-4ba3-9fe7-0b1cc1b0e76a" />
-      <Column Name="Meter" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="5290c973-70b9-4349-8994-3e1be45ab3e9" />
-      <Column Name="Weight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="9de429bd-9a5d-4ea5-8c24-222f0c6a7ee1" />
-      <Column Name="Date" Type="System.DateTime" DbType="DATE" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="960a9c88-d1ad-4b05-bbfb-1364337c3f02" />
-      <Column Name="SlotNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="0b934e4d-82cb-4dca-b95c-c2862712015b" />
+    <Type Name="TakaSheet" ed:Guid="6bc2e532-46c2-41a8-8c13-cffbd6eabc1c">
+      <Column Name="TakaSheetIndex" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="902554d4-856d-4792-8e9f-c718e015b01b" />
+      <Column Name="TakaID" Type="System.Int32" DbType="INT NOT NULL" CanBeNull="false" UpdateCheck="Never" Precision="10" ed:ValidateRequired="true" ed:Guid="111e5e85-2eb6-435e-adc3-f3a74e9a609e" />
+      <Column Name="MachineNumber" Type="System.Int32" DbType="INT NOT NULL" CanBeNull="false" UpdateCheck="Never" Precision="10" ed:ValidateRequired="true" ed:Guid="8a272155-45d1-4b90-9dca-ef429c466f75" />
+      <Column Name="Meter" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="e3e08b04-521b-4694-9d82-0fbe9305d451" />
+      <Column Name="Weight" Type="System.Double" DbType="FLOAT" CanBeNull="true" UpdateCheck="Never" Precision="53" ed:ValidateRequired="false" ed:Guid="d39bc54d-0659-478a-be8f-89be2989f4a2" />
+      <Column Name="Date" Type="System.DateTime" DbType="DATE" CanBeNull="true" UpdateCheck="Never" ed:ValidateRequired="false" ed:Guid="cca746a2-da44-4591-b23f-276658406b20" />
+      <Column Name="SlotNumber" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="14c52f14-daa9-4696-a6d7-578d87406a4e" />
+    </Type>
+  </Table>
+  <Table Name="dbo.UserRefreshToken" Member="UserRefreshTokens">
+    <Type Name="UserRefreshToken" ed:Guid="46acf80d-141c-4386-b7cc-a58ccf989464">
+      <Column Name="UserID" Type="System.Int32" DbType="INT NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="5a636c7a-e025-4226-a97f-d6c3f184760c" />
+      <Column Name="RefreshTokenID" Type="System.Int32" DbType="INT NOT NULL" IsPrimaryKey="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="9f347433-6d59-4e19-ad28-c922ae259c8e" />
+      <Association Name="RefreshToken_UserRefreshToken" ed:AssociationGuid="0e566ad5-f7b9-439c-be7f-8cc66828e155" Member="RefreshToken" ed:Guid="f844919a-be21-4470-bf9b-d4cb1b96159b" ThisKey="RefreshTokenID" OtherKey="RefreshTokenID" Type="RefreshToken" DeleteRule="NO ACTION" IsForeignKey="true" />
+      <Association Name="User_UserRefreshToken" ed:AssociationGuid="366dbc26-f789-43a0-a6bf-1100a85ed9b1" Member="User" ed:Guid="272b8991-fd5a-4cb0-8113-b1dd44d372e6" ThisKey="UserID" OtherKey="UserID" Type="User" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Users" Member="Users">
-    <Type Name="User" ed:Guid="27d63875-96fb-431e-8ba0-898cc9942081">
-      <Column Name="UserID" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="ed35e54a-bc9c-4b55-9e02-49fcb3279656" />
-      <Column Name="UserName" Type="System.String" DbType="VARCHAR(150)" CanBeNull="true" UpdateCheck="Never" MaxLength="150" ed:ValidateMaxLength="150" ed:ValidateRequired="false" ed:Guid="bf8da590-ac17-4626-b4e4-e41bae5db0a1" />
-      <Column Name="Email" Type="System.String" DbType="VARCHAR(80)" CanBeNull="true" UpdateCheck="Never" MaxLength="80" ed:ValidateMaxLength="80" ed:ValidateRequired="false" ed:Guid="3bda63c1-5b42-45e7-b742-b9a9f0e3b666" />
-      <Column Name="Password" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="08450683-1a73-41a7-a28e-7cc812262616" />
-      <Column Name="ContactNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="c2b4b526-0cf9-4018-9c2f-e13fda62b050" />
-      <Column Name="AlternetContactNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="0af1e90f-7a0a-4d02-b3e9-e73cfd874664" />
-      <Column Name="RoleID" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="630957d5-c242-4d23-893c-821c5365b9fb" />
-      <Association Name="Role_User" ed:AssociationGuid="c1f8c591-dff5-45b8-b723-1017cd85a5f5" Member="Role" ed:Guid="4d254b5e-c526-4f89-83e0-e157a1c1aa1c" ThisKey="RoleID" OtherKey="RoleID" Type="Role" DeleteRule="NO ACTION" IsForeignKey="true" />
+    <Type Name="User" ed:Guid="709a698c-c9a5-49f0-91e3-2554ef989216">
+      <Column Name="UserID" Type="System.Int32" AutoSync="OnInsert" DbType="INT NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" UpdateCheck="Always" Precision="10" ed:ValidateRequired="true" ed:Guid="971557e8-b69d-43e9-b17c-b735cd1e3b57" />
+      <Column Name="UserName" Type="System.String" DbType="VARCHAR(150)" CanBeNull="true" UpdateCheck="Never" MaxLength="150" ed:ValidateMaxLength="150" ed:ValidateRequired="false" ed:Guid="c5c892ce-6864-4d64-8253-09899a8a6609" />
+      <Column Name="Email" Type="System.String" DbType="VARCHAR(80)" CanBeNull="true" UpdateCheck="Never" MaxLength="80" ed:ValidateMaxLength="80" ed:ValidateRequired="false" ed:Guid="2082850a-4dce-41e1-a626-6cabc768681d" />
+      <Column Name="Password" Type="System.String" DbType="VARCHAR(100)" CanBeNull="true" UpdateCheck="Never" MaxLength="100" ed:ValidateMaxLength="100" ed:ValidateRequired="false" ed:Guid="48ac819a-e322-4531-ab9e-96cf4b0c6f67" />
+      <Column Name="ContactNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="2480882d-c1cb-48dc-a66c-9c78c35b7cfd" />
+      <Column Name="AlternetContactNumber" Type="System.String" DbType="VARCHAR(50)" CanBeNull="true" UpdateCheck="Never" MaxLength="50" ed:ValidateMaxLength="50" ed:ValidateRequired="false" ed:Guid="8733b137-0ade-4953-90a1-30ac8151fe2a" />
+      <Column Name="RoleID" Type="System.Int32" DbType="INT" CanBeNull="true" UpdateCheck="Never" Precision="10" ed:ValidateRequired="false" ed:Guid="4c798b76-1a1d-4d0d-a7e0-59d04d10f804" />
+      <Association Name="User_UserRefreshToken" ed:AssociationGuid="366dbc26-f789-43a0-a6bf-1100a85ed9b1" Member="UserRefreshTokens" ed:Guid="9c93f715-b1a3-48c9-9c97-2414673ada19" ThisKey="UserID" OtherKey="UserID" Type="UserRefreshToken" />
+      <Association Name="Role_User" ed:AssociationGuid="2ba4c8f5-6277-4c38-81ea-c047a9d18654" Member="Role" ed:Guid="d856224d-25b4-4b73-836b-49ffa1aec59b" ThisKey="RoleID" OtherKey="RoleID" Type="Role" DeleteRule="NO ACTION" IsForeignKey="true" />
     </Type>
   </Table>
 </Database>

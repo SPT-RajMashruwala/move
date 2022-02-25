@@ -20,6 +20,7 @@ namespace KarKhanaBook.Model.Common
         public String Message { get; set; }
         public String Status { get; set; }
         public int StatusCode { get; set; }
+        public dynamic Data { get; set; }
 
     }
 }

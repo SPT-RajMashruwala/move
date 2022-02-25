@@ -24,14 +24,14 @@ namespace KarKhanaBook.Controllers.Challan
         [Route("ChallanSlip/View")]
         public IActionResult View()
         {
-            return Ok(new ChallanSlips().View().Result);
+            return Ok(new ChallanSlips().View());
         }
 
         [HttpGet]
         [Route("ChallanSlip/ViewByID/{ID}")]
         public IActionResult ViewByID([FromRoute] int ID)
         {
-            return Ok(new ChallanSlips().ViewByID(ID).Result);
+            return Ok(new ChallanSlips().ViewByID(ID));
         }
 
         [HttpPut]
