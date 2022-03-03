@@ -8,11 +8,18 @@ namespace KarKhanaBook.Model.Kariger
 {
     public class KarigerDailySheet
     {
-        [Required(ErrorMessage = "UserName required ! ")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter Only Letter")]
-        public string UserName { get; set; }
+        public int IndexNumber{get;set;}
+       /* [Required(ErrorMessage = "UserName required ! ")]
+        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter Only Letter")]*/
+        public Model.Common.IntegerNullString UserName { get; set; } = new Common.IntegerNullString();
+        /*[Required(ErrorMessage = "Shift required ! ")]*/
+        public Model.Common.IntegerNullString Shift { get; set; } = new Model.Common.IntegerNullString();
+        [Required(ErrorMessage = "Date Must required ! ")]
 
+        public DateTime Date { get; set; }
+        public string Remark { get; set; }
 
+        public List<Machine> machine { get; set; } = new List<Machine>();
         /* [Required(ErrorMessage = "Average of Machine required ! ")]
          [RegularExpression(@"[+-]?([0-9]*[.])?[0-9]+$", ErrorMessage = "Enter Only Digit Ex.Float-Value 300.00 ")]
          public float AVGOfMachine { get; set; }
@@ -22,15 +29,12 @@ namespace KarKhanaBook.Model.Kariger
          [RegularExpression(@"^[0-9]+$", ErrorMessage = "Enter Only Digit")]
          public int MachineNumber { get; set; }*/
 
-        public List<Machine> machine { get; set; } = new List<Machine>();
 
 
-        [Required(ErrorMessage = "Shift required ! ")]
-        public string Shift { get; set; }
+       
 
 
-        [Required(ErrorMessage = "Date Must required ! ")]
-        public DateTime Date { get; set; }
+     
     }
     public class Machine
     {

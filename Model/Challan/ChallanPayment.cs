@@ -24,5 +24,6 @@ namespace KarKhanaBook.Model.Challan
         [RegularExpression(@"[+-]?([0-9]*[.])?[0-9]+$", ErrorMessage = "Enter Only Digit Ex.Float-Value 300.00 ")]
         public float TotalWeight { get; set; }
         public float Payment { get; set; }
+        public string Remark { get; set; }
     }
 }

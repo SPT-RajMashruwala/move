@@ -9,7 +9,8 @@ namespace KarKhanaBook.Model.Login
     public class User
     {
         [Required(ErrorMessage = "UserName Required !")]
-        [RegularExpression(@"^[a-zA-Z]+$", ErrorMessage = "Enter Only Letter")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Enter Only Letter or Digit  Or Combine String of Letter-Digit no special" +
+            "Symbole allowed")]
         public string UserName { get; set; }
 
 

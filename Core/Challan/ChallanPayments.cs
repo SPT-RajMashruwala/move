@@ -3,6 +3,7 @@ using KarkhanaBookContext;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -12,6 +13,35 @@ namespace KarKhanaBook.Core.Challan
 {
     public class ChallanPayments
     {
+        public Result Search(DataTable table ) 
+        {
+            List<Model.Challan.ChallanPayment> challanPayment = new List<Model.Challan.ChallanPayment>();
+            for (int i = 0; i < table.Rows.Count; i++)
+            {
+                DataRow dr = table.Rows[i];
+
+
+                challanPayment.Add(new Model.Challan.ChallanPayment()
+                {
+                    BillSerialNumber=dr["BillSerialNumber"].ToString(),
+                    ChallanSlipSerialNumber= dr["ChallanSlipSerialNumber"].ToString(),
+                    Payment= float.Parse(dr["Payment"].ToString()),
+                    PaymentSlipIndex= Int16.Parse(dr["PaymentSlipIndex"].ToString()),
+                    TotalWeight= float.Parse(dr["TotalWeight"].ToString()),
+                    Remark= dr["Remark"].ToString()
+
+                });
+
+            }
+            return new Result()
+            {
+                Message = "PaymentSlip Added Successfully",
+                Status = ((ResultStatus)(Enum.Parse(typeof(ResultStatus), ResultStatus.success.ToString()
+                      , true))).ToString(),
+                StatusCode = (int)HttpStatusCode.OK,
+                Data=challanPayment,
+            };
+        }
         public Result Add(Model.Challan.ChallanPayment value)
         {
             using (KarkhanaBookDataContext context = new KarkhanaBookDataContext())
@@ -31,6 +61,7 @@ namespace KarKhanaBook.Core.Challan
                     dbpaymentSlip.TotalWeight = TotalWeight;
                     dbpaymentSlip.Payment = value.Payment;
                     dbpaymentSlip.DateTime = DateTime.Now;
+                    dbpaymentSlip.Remark = value.Remark;
 
                     context.PaymentSlips.InsertOnSubmit(dbpaymentSlip);
                     context.SubmitChanges();
@@ -133,6 +164,8 @@ namespace KarKhanaBook.Core.Challan
                 var dbobjlist = (from obj in context.PaymentSlips
                                  where obj.PaymentSlipIndex == ID
                                  select obj).ToList();
+
+
                 if (dbobjlist.Count > 0)
                 {
                     dbobj.ChallanSlipSerialNumber = value.ChallanSlipSerialNumber;
